@@ -77,7 +77,7 @@ def train(args, local_rank):
         if multi_gpu:
             device = torch.device(f"cuda:{local_rank}")
         else:
-            device = torch.device("cuda")
+            device = torch.device("cuda:0")
         if is_distributed:
             dist.init_process_group(backend="nccl", init_method="env://")
             torch.cuda.set_device(device)
