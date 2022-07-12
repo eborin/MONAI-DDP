@@ -1,0 +1,33 @@
+#### Core packages
+monai[all]
+seaborn
+
+#### Other tools (optional)
+# openpyxl
+# dask[complete]
+# umap-learn
+# ipywidgets
+# tensorflow_addons
+# pydot
+# nodejs
+# tabulate
+# plotly
+# black
+# isort
+
+#### Jupyter lab extensions (optional)
+jupyterlab
+# jupyterlab-git
+# jupyterthemes
+# jupyterlab-code-formatter
+# theme-darcula
+# pylantern
+# jupyterlab_theme_solarized_dark
+# jupyterlab-drawio
+# jupyterlab_execute_time
+# jupyterlab-system-monitor
+# jupyter-dash
+# lckr-jupyterlab-variableinspector
+# jupyterlab-nvdashboard
+# jupyterlab-lsp
+# python-lsp-server[all]
