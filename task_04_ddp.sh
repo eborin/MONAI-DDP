@@ -1,4 +1,4 @@
-source vars.sh
+source ./vars.sh
 
 DDP_SCRIPT="ddp/train.py"
 DATADIR="./data"
