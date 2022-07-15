@@ -31,4 +31,4 @@ $CONTAINER_CMD run --gpus all -it --rm \
             --master_addr=${MASTER_ADDR} --master_port=${MASTER_PORT} \
   	${DDP_SCRIPT} -fold ${FOLD} -root_dir ${DATADIR} -train_num_workers 4 \
     -interval 1 -num_samples 1 -learning_rate ${LR} -max_epochs ${EPOCHS} \
-    -task_id ${TASKID} -pos_sample_num 2 -tta_val -distributed
+    -task_id ${TASKID} -pos_sample_num 2 -tta_val true -distributed true

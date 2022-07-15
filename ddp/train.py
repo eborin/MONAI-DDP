@@ -1,21 +1,15 @@
 import logging
 import os
+import sys
+import time
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
-import time
-import sys
 
 import torch
 import torch.distributed as dist
 from monai.config import print_config
-from monai.handlers import (
-    CheckpointSaver,
-    LrScheduleHandler,
-    MeanDice,
-    StatsHandler,
-    ValidationHandler,
-    from_engine,
-)
+from monai.handlers import (CheckpointSaver, LrScheduleHandler, MeanDice,
+                            StatsHandler, ValidationHandler, from_engine)
 from monai.inferers import SimpleInferer, SlidingWindowInferer
 from monai.losses import DiceCELoss
 from monai.utils import set_determinism
@@ -212,7 +206,6 @@ if __name__ == "__main__":
         "-root_dir",
         "--root_dir",
         type=str,
-        required=True,
         help="Dataset path"
     )
     parser.add_argument(
@@ -343,25 +336,25 @@ if __name__ == "__main__":
     parser.add_argument(
         "-amp",
         "--amp",
-        action="store_true",
+        type=bool,
         help="Whether to use automatic mixed precision."
     )
     parser.add_argument(
         "-lr_decay",
         "--lr_decay",
-        action="store_true",
+        type=bool,
         help="Whether to use learning rate decay."
     )
     parser.add_argument(
         "-tta_val",
         "--tta_val",
-        action="store_true",
+        type=bool,
         help="Whether to use test time augmentation."
     )
     parser.add_argument(
         "-batch_dice",
         "--batch_dice",
-        action="store_true",
+        type=bool,
         help="The batch parameter of DiceCELoss."
     )
     parser.add_argument(
@@ -374,24 +367,29 @@ if __name__ == "__main__":
     parser.add_argument(
         "-distributed",
         "--distributed",
-        action="store_true",
+        type=bool,
         help="Whether to perform distributed training."
     )
     parser.add_argument(
         "-use_cpu",
         "--use_cpu",
-        action="store_true",
+        type=bool,
         help="Whether to use CPU instead of GPU"
     )
     parser.add_argument(
         "-multi_gpu",
         "--multi_gpu",
-        action="store_true",
+        type=bool,
         help="Use multiple GPUs in the same machine"
     )
+    parser.add_argument(
+        "-use_sagemaker",
+        "--use_sagemaker",
+        type=bool,
+        help="Apply Sagemaker environment variables"
+    )
 
-    local_rank = os.environ.get("LOCAL_RANK", None)
-    assert local_rank is not None, "Invalid LOCAL_RANK"
+    local_rank = os.environ.get("LOCAL_RANK", -1)
     local_rank = int(local_rank)
 
     args = parser.parse_args()
@@ -400,6 +398,12 @@ if __name__ == "__main__":
 
     if local_rank == 0:
         print_config()
+
+    if args.use_sagemaker:
+        args.root_dir = os.environ.get("SM_CHANNEL_TRAIN")
+
+    assert local_rank is not None, "Invalid LOCAL_RANK"
+    assert args.root_dir is not None, "Invalid root_dir"
 
     if args.mode == "train":
         ret_val = train(args, local_rank)
