@@ -1,4 +1,6 @@
 # ==================================================================
+# Image: Base
+# ------------------------------------------------------------------
 # module list
 # ------------------------------------------------------------------
 # python        3.8    (apt)
@@ -8,8 +10,7 @@
 # jupyterlab    latest (pip)
 # keras         latest (pip)
 # ==================================================================
-
-FROM nvidia/cuda:11.5.0-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:11.5.0-cudnn8-runtime-ubuntu20.04 AS base
 ENV LANG C.UTF-8
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
@@ -115,3 +116,24 @@ RUN cd / \
   && python -m pip --default-timeout=300 --no-cache-dir install --upgrade \
     --requirement requirements.txt  \
   && rm /requirements.txt
+
+# ==================================================================
+# Image: Sagemaker
+# ------------------------------------------------------------------
+# module list
+# ------------------------------------------------------------------
+# python             3.8    (apt)
+# jupyter            latest (pip)
+# pytorch            latest (pip)
+# tensorflow         latest (pip)
+# jupyterlab         latest (pip)
+# keras              latest (pip)
+# sagemaker-training latest (pip)
+# ==================================================================
+FROM base
+
+# ==================================================================
+# sagemaker
+# ------------------------------------------------------------------
+
+RUN pip3 install sagemaker-training
