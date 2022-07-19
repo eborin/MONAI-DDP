@@ -1167,3 +1167,531 @@ the effective log level of engine logger or RootLogger is higher than INFO, may 
 2022-07-19 09:55:47,734 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
 2022-07-19 09:55:47,734 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[10] Complete. Time taken: 00:01:26
 2022-07-19 09:55:47,735 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run complete. Time taken: 00:14:27
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:08<00:26,  8.96s/it]Loading dataset: 100%|██████████| 4/4 [00:08<00:00,  2.24s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:24<06:12, 24.84s/it]Loading dataset:  44%|████▍     | 7/16 [00:26<00:25,  2.85s/it]Loading dataset:  56%|█████▋    | 9/16 [00:36<00:24,  3.47s/it]Loading dataset:  69%|██████▉   | 11/16 [00:39<00:14,  2.91s/it]Loading dataset:  75%|███████▌  | 12/16 [00:41<00:11,  2.81s/it]Loading dataset:  88%|████████▊ | 14/16 [00:42<00:03,  1.91s/it]Loading dataset: 100%|██████████| 16/16 [00:42<00:00,  2.64s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 09:59:45,031 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 09:59:52,769 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 1/16 -- train_loss: 2.5219 
+2022-07-19 09:59:52,777 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-19 09:59:58,543 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 2/16 -- train_loss: 1.7259 
+2022-07-19 10:00:04,468 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 3/16 -- train_loss: 1.2482 
+2022-07-19 10:00:10,460 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 4/16 -- train_loss: 1.1511 
+2022-07-19 10:00:16,242 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 5/16 -- train_loss: 0.9381 
+2022-07-19 10:00:22,048 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 6/16 -- train_loss: 0.9484 
+2022-07-19 10:00:27,855 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 7/16 -- train_loss: 0.9971 
+2022-07-19 10:00:33,914 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 8/16 -- train_loss: 0.9253 
+2022-07-19 10:00:39,730 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 9/16 -- train_loss: 0.9239 
+2022-07-19 10:00:45,631 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 10/16 -- train_loss: 0.8775 
+2022-07-19 10:00:51,504 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 11/16 -- train_loss: 0.8585 
+2022-07-19 10:00:57,457 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 12/16 -- train_loss: 0.8310 
+2022-07-19 10:01:03,312 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 13/16 -- train_loss: 0.8360 
+2022-07-19 10:01:09,223 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 14/16 -- train_loss: 0.7545 
+2022-07-19 10:01:15,111 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 15/16 -- train_loss: 0.9807 
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:08<00:26,  8.77s/it]Loading dataset: 100%|██████████| 4/4 [00:09<00:00,  1.74s/it]Loading dataset: 100%|██████████| 4/4 [00:09<00:00,  2.27s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:26<06:33, 26.21s/it]Loading dataset:  44%|████▍     | 7/16 [00:26<00:25,  2.82s/it]Loading dataset:  56%|█████▋    | 9/16 [00:38<00:25,  3.67s/it]Loading dataset:  69%|██████▉   | 11/16 [00:40<00:14,  2.97s/it]Loading dataset:  75%|███████▌  | 12/16 [00:43<00:11,  2.88s/it]Loading dataset:  81%|████████▏ | 13/16 [00:43<00:06,  2.33s/it]Loading dataset:  88%|████████▊ | 14/16 [00:43<00:03,  1.89s/it]Loading dataset: 100%|██████████| 16/16 [00:43<00:00,  2.73s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 13:39:38,459 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 13:39:53,756 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 1/16 -- train_loss: 2.9716 
+2022-07-19 13:39:53,870 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-19 13:39:59,563 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 2/16 -- train_loss: 2.1060 
+2022-07-19 13:40:05,181 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 3/16 -- train_loss: 1.6505 
+2022-07-19 13:40:10,955 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 4/16 -- train_loss: 1.1844 
+2022-07-19 13:40:16,695 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 5/16 -- train_loss: 1.0397 
+2022-07-19 13:40:22,649 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 6/16 -- train_loss: 0.9930 
+2022-07-19 13:40:28,288 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 7/16 -- train_loss: 1.0005 
+2022-07-19 13:40:34,115 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 8/16 -- train_loss: 0.9892 
+2022-07-19 13:40:39,874 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 9/16 -- train_loss: 1.0152 
+2022-07-19 13:40:45,677 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 10/16 -- train_loss: 0.9568 
+2022-07-19 13:40:51,418 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 11/16 -- train_loss: 0.9298 
+2022-07-19 13:40:57,300 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 12/16 -- train_loss: 0.8799 
+2022-07-19 13:41:03,044 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 13/16 -- train_loss: 0.8641 
+2022-07-19 13:41:08,877 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 14/16 -- train_loss: 0.9344 
+2022-07-19 13:41:14,631 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 15/16 -- train_loss: 0.8505 
+2022-07-19 13:41:20,526 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 16/16 -- train_loss: 0.8840 
+2022-07-19 13:41:20,526 - ignite.engine.engine.DynUNetEvaluator - INFO - Engine run resuming from iteration 0, epoch 0 until 1 epochs
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:09<00:28,  9.59s/it]Loading dataset: 100%|██████████| 4/4 [00:09<00:00,  2.40s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:27<06:45, 27.02s/it]Loading dataset:  44%|████▍     | 7/16 [00:28<00:27,  3.09s/it]Loading dataset:  56%|█████▋    | 9/16 [00:38<00:25,  3.61s/it]Loading dataset:  69%|██████▉   | 11/16 [00:41<00:15,  3.04s/it]Loading dataset:  75%|███████▌  | 12/16 [00:43<00:11,  2.83s/it]Loading dataset:  88%|████████▊ | 14/16 [00:44<00:03,  1.99s/it]Loading dataset: 100%|██████████| 16/16 [00:44<00:00,  2.77s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 14:01:47,186 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 14:01:54,824 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 1/16 -- train_loss: 3.3699 
+2022-07-19 14:01:54,832 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-19 14:02:00,476 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 2/16 -- train_loss: 2.0825 
+2022-07-19 14:02:06,080 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 3/16 -- train_loss: 1.6562 
+2022-07-19 14:02:11,781 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 4/16 -- train_loss: 1.1304 
+2022-07-19 14:02:17,751 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 5/16 -- train_loss: 1.0460 
+2022-07-19 14:02:23,411 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 6/16 -- train_loss: 0.9956 
+2022-07-19 14:02:29,026 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 7/16 -- train_loss: 0.9694 
+2022-07-19 14:02:34,745 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 8/16 -- train_loss: 0.9946 
+2022-07-19 14:02:40,459 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 9/16 -- train_loss: 0.9545 
+2022-07-19 14:02:46,232 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 10/16 -- train_loss: 0.9608 
+2022-07-19 14:02:51,944 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 11/16 -- train_loss: 0.9602 
+2022-07-19 14:02:57,690 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 12/16 -- train_loss: 0.9124 
+2022-07-19 14:03:03,429 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 13/16 -- train_loss: 0.8904 
+2022-07-19 14:03:09,216 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 14/16 -- train_loss: 0.8794 
+2022-07-19 14:03:14,926 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 15/16 -- train_loss: 0.9295 
+2022-07-19 14:03:20,756 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 16/16 -- train_loss: 0.9658 
+2022-07-19 14:03:20,756 - ignite.engine.engine.DynUNetEvaluator - INFO - Engine run resuming from iteration 0, epoch 0 until 1 epochs
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+  File "/home/ubuntu/MONAI-DDP/ddp/train.py", line 148
+    ]
+    ^
+SyntaxError: closing parenthesis ']' does not match opening parenthesis '(' on line 144
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 2355) of binary: /opt/conda/envs/pytorch/bin/python
+Traceback (most recent call last):
+  File "/opt/conda/envs/pytorch/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==1.12.0', 'console_scripts', 'torchrun')())
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/run.py", line 761, in main
+    run(args)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/run.py", line 752, in run
+    elastic_launch(
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+ddp/train.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2022-07-19_14:05:48
+  host      : ip-172-31-77-139.ec2.internal
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2355)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:08<00:25,  8.66s/it]Loading dataset: 100%|██████████| 4/4 [00:08<00:00,  1.72s/it]Loading dataset: 100%|██████████| 4/4 [00:08<00:00,  2.24s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:26<06:31, 26.07s/it]Loading dataset:  44%|████▍     | 7/16 [00:27<00:26,  2.98s/it]Loading dataset:  56%|█████▋    | 9/16 [00:36<00:24,  3.46s/it]Loading dataset:  69%|██████▉   | 11/16 [00:39<00:14,  2.81s/it]Loading dataset:  75%|███████▌  | 12/16 [00:42<00:11,  2.83s/it]Loading dataset:  88%|████████▊ | 14/16 [00:42<00:03,  1.96s/it]Loading dataset: 100%|██████████| 16/16 [00:42<00:00,  2.68s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 14:07:18,888 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 14:07:26,541 - ignite.engine.engine.DynUNetEvaluator - INFO - Engine run resuming from iteration 0, epoch 0 until 1 epochs
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:09<00:27,  9.24s/it]Loading dataset: 100%|██████████| 4/4 [00:09<00:00,  2.31s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:25<06:26, 25.76s/it]Loading dataset:  44%|████▍     | 7/16 [00:27<00:26,  2.92s/it]Loading dataset:  56%|█████▋    | 9/16 [00:36<00:24,  3.44s/it]Loading dataset:  69%|██████▉   | 11/16 [00:40<00:15,  3.04s/it]Loading dataset:  75%|███████▌  | 12/16 [00:42<00:11,  2.81s/it]Loading dataset:  81%|████████▏ | 13/16 [00:42<00:06,  2.27s/it]Loading dataset:  88%|████████▊ | 14/16 [00:43<00:03,  1.92s/it]Loading dataset: 100%|██████████| 16/16 [00:43<00:00,  2.71s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 14:11:33,924 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 14:11:41,549 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 1/16 -- train_loss: 3.3239 
+2022-07-19 14:11:41,648 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-19 14:11:47,899 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 2/16 -- train_loss: 2.0668 
+2022-07-19 14:11:54,096 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 3/16 -- train_loss: 1.4729 
+2022-07-19 14:12:00,656 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 4/16 -- train_loss: 1.2050 
+2022-07-19 14:12:06,458 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 5/16 -- train_loss: 1.0509 
+2022-07-19 14:12:12,185 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 6/16 -- train_loss: 0.9918 
+2022-07-19 14:12:17,833 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 7/16 -- train_loss: 0.9365 
+2022-07-19 14:12:23,774 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 8/16 -- train_loss: 0.9251 
+2022-07-19 14:12:29,441 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 9/16 -- train_loss: 0.9239 
+2022-07-19 14:12:35,177 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 10/16 -- train_loss: 0.8946 
+2022-07-19 14:12:40,882 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 11/16 -- train_loss: 0.8680 
+2022-07-19 14:12:46,637 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 12/16 -- train_loss: 0.9244 
+2022-07-19 14:12:52,344 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 13/16 -- train_loss: 1.0333 
+2022-07-19 14:12:58,192 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 14/16 -- train_loss: 0.9289 
+2022-07-19 14:13:03,928 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 15/16 -- train_loss: 0.8424 
+2022-07-19 14:13:09,821 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 16/16 -- train_loss: 0.8641 
+2022-07-19 14:13:09,821 - ignite.engine.engine.DynUNetEvaluator - INFO - Engine run resuming from iteration 0, epoch 0 until 1 epochs
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+[W socket.cpp:401] [c10d] The server socket has failed to bind to [::]:1234 (errno: 98 - Address already in use).
+[W socket.cpp:401] [c10d] The server socket has failed to bind to ?UNKNOWN? (errno: 98 - Address already in use).
+[E socket.cpp:435] [c10d] The server socket has failed to listen on any local network address.
+Traceback (most recent call last):
+  File "/opt/conda/envs/pytorch/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==1.12.0', 'console_scripts', 'torchrun')())
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/run.py", line 761, in main
+    run(args)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/run.py", line 752, in run
+    elastic_launch(
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 236, in launch_agent
+    result = agent.run()
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 125, in wrapper
+    result = f(*args, **kwargs)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 709, in run
+    result = self._invoke_run(role)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 844, in _invoke_run
+    self._initialize_workers(self._worker_group)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 125, in wrapper
+    result = f(*args, **kwargs)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 678, in _initialize_workers
+    self._rendezvous(worker_group)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 125, in wrapper
+    result = f(*args, **kwargs)
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 538, in _rendezvous
+    store, group_rank, group_world_size = spec.rdzv_handler.next_rendezvous()
+  File "/opt/conda/envs/pytorch/lib/python3.9/site-packages/torch/distributed/elastic/rendezvous/static_tcp_rendezvous.py", line 55, in next_rendezvous
+    self._store = TCPStore(  # type: ignore[call-arg]
+RuntimeError: The server socket has failed to listen on any local network address. The server socket has failed to bind to [::]:1234 (errno: 98 - Address already in use). The server socket has failed to bind to ?UNKNOWN? (errno: 98 - Address already in use).
+nohup: ignoring input
+Using vars: master_addr=localhost, master_port=1234, local_rank=0 number_of_nodes=1
+MONAI version: 0.9.0
+Numpy version: 1.22.4
+Pytorch version: 1.12.0
+MONAI flags: HAS_EXT = False, USE_COMPILED = False
+MONAI rev id: af0e0e9f757558d144b655c63afcea3a4e0a06f5
+MONAI __file__: /home/ubuntu/.local/lib/python3.9/site-packages/monai/__init__.py
+
+Optional dependencies:
+Pytorch Ignite version: 0.4.8
+Nibabel version: 4.0.1
+scikit-image version: 0.19.3
+Pillow version: 9.0.1
+Tensorboard version: 2.9.1
+gdown version: 4.5.1
+TorchVision version: 0.13.0
+tqdm version: 4.63.2
+lmdb version: 1.3.0
+psutil version: 5.9.1
+pandas version: 1.4.3
+einops version: 0.4.1
+transformers version: 4.20.1
+mlflow version: 1.27.0
+pynrrd version: 0.4.3
+
+For details about installing the optional dependencies, please visit:
+    https://docs.monai.io/en/latest/installation.html#installing-the-recommended-dependencies
+
+Using batch size of 1
+Loading dataset:   0%|          | 0/4 [00:00<?, ?it/s]Loading dataset:  25%|██▌       | 1/4 [00:09<00:28,  9.59s/it]Loading dataset: 100%|██████████| 4/4 [00:09<00:00,  2.40s/it]
+Loading dataset:   0%|          | 0/16 [00:00<?, ?it/s]Loading dataset:   6%|▋         | 1/16 [00:26<06:42, 26.87s/it]Loading dataset:  44%|████▍     | 7/16 [00:27<00:26,  2.92s/it]Loading dataset:  56%|█████▋    | 9/16 [00:38<00:25,  3.71s/it]Loading dataset:  69%|██████▉   | 11/16 [00:40<00:14,  2.88s/it]Loading dataset:  75%|███████▌  | 12/16 [00:43<00:11,  2.94s/it]Loading dataset:  88%|████████▊ | 14/16 [00:44<00:04,  2.05s/it]Loading dataset: 100%|██████████| 16/16 [00:44<00:00,  2.77s/it]
+the effective log level of engine logger or RootLogger is higher than INFO, may not record log, please call `logging.basicConfig(stream=sys.stdout, level=logging.INFO)` to enable it.
+2022-07-19 14:20:40,703 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 10 epochs
+2022-07-19 14:20:48,325 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 1/16 -- train_loss: 2.6467 
+2022-07-19 14:20:48,431 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-19 14:20:54,136 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 2/16 -- train_loss: 1.8422 
+2022-07-19 14:20:59,778 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 3/16 -- train_loss: 1.4595 
+2022-07-19 14:21:05,636 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 4/16 -- train_loss: 1.1069 
+2022-07-19 14:21:11,394 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 5/16 -- train_loss: 1.0569 
+2022-07-19 14:21:17,306 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 6/16 -- train_loss: 0.9874 
+2022-07-19 14:21:22,961 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 7/16 -- train_loss: 0.9226 
+2022-07-19 14:21:28,851 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 8/16 -- train_loss: 0.9341 
+2022-07-19 14:21:34,588 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 9/16 -- train_loss: 0.8970 
+2022-07-19 14:21:40,453 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 10/16 -- train_loss: 0.9041 
+2022-07-19 14:21:46,198 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 11/16 -- train_loss: 0.8803 
+2022-07-19 14:21:52,116 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 12/16 -- train_loss: 0.8934 
+2022-07-19 14:21:57,906 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 13/16 -- train_loss: 0.8690 
+2022-07-19 14:22:03,727 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 14/16 -- train_loss: 0.8226 
+2022-07-19 14:22:09,484 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 15/16 -- train_loss: 0.8261 
+2022-07-19 14:22:15,345 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/10, Iter: 16/16 -- train_loss: 0.8306 
+2022-07-19 14:22:15,345 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:22:15,346 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[1] Complete. Time taken: 00:01:34
+2022-07-19 14:22:21,816 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 1/16 -- train_loss: 0.9036 
+2022-07-19 14:22:27,854 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 2/16 -- train_loss: 0.9650 
+2022-07-19 14:22:33,524 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 3/16 -- train_loss: 0.8329 
+2022-07-19 14:22:39,308 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 4/16 -- train_loss: 0.9641 
+2022-07-19 14:22:44,980 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 5/16 -- train_loss: 0.7233 
+2022-07-19 14:22:50,882 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 6/16 -- train_loss: 0.7533 
+2022-07-19 14:22:56,534 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 7/16 -- train_loss: 0.9010 
+2022-07-19 14:23:02,390 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 8/16 -- train_loss: 0.8661 
+2022-07-19 14:23:08,164 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 9/16 -- train_loss: 0.7790 
+2022-07-19 14:23:13,994 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 10/16 -- train_loss: 0.8135 
+2022-07-19 14:23:19,737 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 11/16 -- train_loss: 0.5672 
+2022-07-19 14:23:25,621 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 12/16 -- train_loss: 0.8851 
+2022-07-19 14:23:31,383 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 13/16 -- train_loss: 0.6410 
+2022-07-19 14:23:37,235 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 14/16 -- train_loss: 0.8017 
+2022-07-19 14:23:42,975 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 15/16 -- train_loss: 0.9622 
+2022-07-19 14:23:48,875 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 2/10, Iter: 16/16 -- train_loss: 0.7054 
+2022-07-19 14:23:48,876 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:23:48,876 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[2] Complete. Time taken: 00:01:34
+2022-07-19 14:23:55,270 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 1/16 -- train_loss: 0.5233 
+2022-07-19 14:24:01,540 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 2/16 -- train_loss: 0.6116 
+2022-07-19 14:24:07,199 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 3/16 -- train_loss: 0.7953 
+2022-07-19 14:24:12,994 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 4/16 -- train_loss: 0.6626 
+2022-07-19 14:24:18,639 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 5/16 -- train_loss: 0.8131 
+2022-07-19 14:24:24,537 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 6/16 -- train_loss: 0.7835 
+2022-07-19 14:24:30,200 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 7/16 -- train_loss: 0.6048 
+2022-07-19 14:24:36,043 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 8/16 -- train_loss: 0.9925 
+2022-07-19 14:24:41,732 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 9/16 -- train_loss: 0.8937 
+2022-07-19 14:24:47,758 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 10/16 -- train_loss: 0.8260 
+2022-07-19 14:24:53,526 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 11/16 -- train_loss: 0.5901 
+2022-07-19 14:24:59,442 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 12/16 -- train_loss: 0.7519 
+2022-07-19 14:25:05,188 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 13/16 -- train_loss: 0.8794 
+2022-07-19 14:25:11,040 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 14/16 -- train_loss: 0.7669 
+2022-07-19 14:25:16,764 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 15/16 -- train_loss: 0.7581 
+2022-07-19 14:25:22,648 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 3/10, Iter: 16/16 -- train_loss: 0.6208 
+2022-07-19 14:25:22,648 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:25:22,648 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[3] Complete. Time taken: 00:01:34
+2022-07-19 14:25:29,055 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 1/16 -- train_loss: 0.7281 
+2022-07-19 14:25:35,082 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 2/16 -- train_loss: 0.6581 
+2022-07-19 14:25:40,815 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 3/16 -- train_loss: 0.9985 
+2022-07-19 14:25:46,639 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 4/16 -- train_loss: 0.5350 
+2022-07-19 14:25:52,542 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 5/16 -- train_loss: 1.0675 
+2022-07-19 14:25:58,316 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 6/16 -- train_loss: 0.5311 
+2022-07-19 14:26:03,984 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 7/16 -- train_loss: 0.6358 
+2022-07-19 14:26:09,764 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 8/16 -- train_loss: 0.6379 
+2022-07-19 14:26:15,530 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 9/16 -- train_loss: 0.7786 
+2022-07-19 14:26:21,403 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 10/16 -- train_loss: 0.7082 
+2022-07-19 14:26:27,143 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 11/16 -- train_loss: 0.6161 
+2022-07-19 14:26:33,025 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 12/16 -- train_loss: 0.6331 
+2022-07-19 14:26:38,768 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 13/16 -- train_loss: 0.6499 
+2022-07-19 14:26:44,608 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 14/16 -- train_loss: 0.5318 
+2022-07-19 14:26:50,499 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 15/16 -- train_loss: 0.5551 
+2022-07-19 14:26:56,405 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 4/10, Iter: 16/16 -- train_loss: 0.8842 
+2022-07-19 14:26:56,405 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:26:56,405 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[4] Complete. Time taken: 00:01:34
+2022-07-19 14:27:03,055 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 1/16 -- train_loss: 0.4467 
+2022-07-19 14:27:08,820 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 2/16 -- train_loss: 0.5405 
+2022-07-19 14:27:14,595 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 3/16 -- train_loss: 0.5219 
+2022-07-19 14:27:20,517 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 4/16 -- train_loss: 0.5371 
+2022-07-19 14:27:26,265 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 5/16 -- train_loss: 0.5012 
+2022-07-19 14:27:32,024 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 6/16 -- train_loss: 0.3523 
+2022-07-19 14:27:37,772 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 7/16 -- train_loss: 0.5818 
+2022-07-19 14:27:43,669 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 8/16 -- train_loss: 0.6728 
+2022-07-19 14:27:49,428 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 9/16 -- train_loss: 0.3568 
+2022-07-19 14:27:55,286 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 10/16 -- train_loss: 0.2982 
+2022-07-19 14:28:01,024 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 11/16 -- train_loss: 0.4384 
+2022-07-19 14:28:06,945 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 12/16 -- train_loss: 1.0370 
+2022-07-19 14:28:12,698 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 13/16 -- train_loss: 0.7949 
+2022-07-19 14:28:18,539 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 14/16 -- train_loss: 0.4790 
+2022-07-19 14:28:24,298 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 15/16 -- train_loss: 0.3714 
+2022-07-19 14:28:30,253 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 5/10, Iter: 16/16 -- train_loss: 0.4845 
+2022-07-19 14:28:30,254 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:28:30,254 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[5] Complete. Time taken: 00:01:34
+2022-07-19 14:28:37,200 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 1/16 -- train_loss: 0.4277 
+2022-07-19 14:28:42,967 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 2/16 -- train_loss: 0.6246 
+2022-07-19 14:28:48,627 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 3/16 -- train_loss: 0.4806 
+2022-07-19 14:28:54,310 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 4/16 -- train_loss: 0.4749 
+2022-07-19 14:29:00,131 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 5/16 -- train_loss: 1.0734 
+2022-07-19 14:29:05,935 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 6/16 -- train_loss: 0.6973 
+2022-07-19 14:29:11,614 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 7/16 -- train_loss: 0.3639 
+2022-07-19 14:29:17,476 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 8/16 -- train_loss: 0.4183 
+2022-07-19 14:29:23,234 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 9/16 -- train_loss: 0.6242 
+2022-07-19 14:29:29,056 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 10/16 -- train_loss: 0.4738 
+2022-07-19 14:29:34,824 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 11/16 -- train_loss: 0.4166 
+2022-07-19 14:29:40,686 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 12/16 -- train_loss: 0.7858 
+2022-07-19 14:29:46,441 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 13/16 -- train_loss: 0.4873 
+2022-07-19 14:29:52,271 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 14/16 -- train_loss: 0.7261 
+2022-07-19 14:29:58,010 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 15/16 -- train_loss: 0.4581 
+2022-07-19 14:30:03,914 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 6/10, Iter: 16/16 -- train_loss: 0.4571 
+2022-07-19 14:30:03,914 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:30:03,914 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[6] Complete. Time taken: 00:01:34
+2022-07-19 14:30:10,580 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 1/16 -- train_loss: 0.2947 
+2022-07-19 14:30:16,564 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 2/16 -- train_loss: 0.5494 
+2022-07-19 14:30:22,231 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 3/16 -- train_loss: 0.3683 
+2022-07-19 14:30:28,024 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 4/16 -- train_loss: 0.3775 
+2022-07-19 14:30:33,931 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 5/16 -- train_loss: 0.3941 
+2022-07-19 14:30:39,907 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 6/16 -- train_loss: 0.3664 
+2022-07-19 14:30:45,565 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 7/16 -- train_loss: 1.0691 
+2022-07-19 14:30:51,334 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 8/16 -- train_loss: 0.2945 
+2022-07-19 14:30:56,991 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 9/16 -- train_loss: 0.2804 
+2022-07-19 14:31:02,818 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 10/16 -- train_loss: 0.5320 
+2022-07-19 14:31:08,556 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 11/16 -- train_loss: 1.0927 
+2022-07-19 14:31:14,394 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 12/16 -- train_loss: 0.5690 
+2022-07-19 14:31:20,139 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 13/16 -- train_loss: 0.3999 
+2022-07-19 14:31:25,946 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 14/16 -- train_loss: 0.3056 
+2022-07-19 14:31:31,721 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 15/16 -- train_loss: 0.4960 
+2022-07-19 14:31:37,563 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 7/10, Iter: 16/16 -- train_loss: 0.5031 
+2022-07-19 14:31:37,564 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:31:37,564 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[7] Complete. Time taken: 00:01:34
+2022-07-19 14:31:44,093 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 1/16 -- train_loss: 0.3910 
+2022-07-19 14:31:49,845 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 2/16 -- train_loss: 0.4768 
+2022-07-19 14:31:55,510 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 3/16 -- train_loss: 0.5051 
+2022-07-19 14:32:01,328 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 4/16 -- train_loss: 0.6549 
+2022-07-19 14:32:07,432 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 5/16 -- train_loss: 0.9529 
+2022-07-19 14:32:14,142 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 6/16 -- train_loss: 0.4011 
+2022-07-19 14:32:20,185 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 7/16 -- train_loss: 0.3591 
+2022-07-19 14:32:26,476 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 8/16 -- train_loss: 0.4788 
+2022-07-19 14:32:32,640 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 9/16 -- train_loss: 0.3331 
+2022-07-19 14:32:39,281 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 10/16 -- train_loss: 0.5970 
+2022-07-19 14:32:45,294 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 11/16 -- train_loss: 0.3958 
+2022-07-19 14:32:51,663 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 12/16 -- train_loss: 0.2670 
+2022-07-19 14:32:57,795 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 13/16 -- train_loss: 0.4017 
+2022-07-19 14:33:04,220 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 14/16 -- train_loss: 0.4707 
+2022-07-19 14:33:10,299 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 15/16 -- train_loss: 0.3850 
+2022-07-19 14:33:16,747 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 8/10, Iter: 16/16 -- train_loss: 1.0363 
+2022-07-19 14:33:16,748 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:33:16,749 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[8] Complete. Time taken: 00:01:39
+2022-07-19 14:33:23,890 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 1/16 -- train_loss: 0.2783 
+2022-07-19 14:33:30,289 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 2/16 -- train_loss: 0.4281 
+2022-07-19 14:33:36,303 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 3/16 -- train_loss: 0.5105 
+2022-07-19 14:33:42,424 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 4/16 -- train_loss: 0.6101 
+2022-07-19 14:33:48,609 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 5/16 -- train_loss: 0.3855 
+2022-07-19 14:33:55,229 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 6/16 -- train_loss: 0.3701 
+2022-07-19 14:34:01,230 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 7/16 -- train_loss: 0.2874 
+2022-07-19 14:34:07,214 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 8/16 -- train_loss: 0.4000 
+2022-07-19 14:34:12,969 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 9/16 -- train_loss: 0.2929 
+2022-07-19 14:34:18,802 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 10/16 -- train_loss: 0.2035 
+2022-07-19 14:34:24,523 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 11/16 -- train_loss: 0.2795 
+2022-07-19 14:34:30,422 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 12/16 -- train_loss: 0.3026 
+2022-07-19 14:34:36,175 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 13/16 -- train_loss: 0.3303 
+2022-07-19 14:34:41,996 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 14/16 -- train_loss: 0.3757 
+2022-07-19 14:34:47,708 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 15/16 -- train_loss: 0.3995 
+2022-07-19 14:34:53,524 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 9/10, Iter: 16/16 -- train_loss: 0.2593 
+2022-07-19 14:34:53,524 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:34:53,525 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[9] Complete. Time taken: 00:01:37
+2022-07-19 14:35:00,187 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 1/16 -- train_loss: 0.3517 
+2022-07-19 14:35:05,926 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 2/16 -- train_loss: 0.3932 
+2022-07-19 14:35:11,584 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 3/16 -- train_loss: 0.2608 
+2022-07-19 14:35:17,365 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 4/16 -- train_loss: 0.6966 
+2022-07-19 14:35:23,271 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 5/16 -- train_loss: 0.2494 
+2022-07-19 14:35:29,031 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 6/16 -- train_loss: 0.3352 
+2022-07-19 14:35:34,687 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 7/16 -- train_loss: 0.2343 
+2022-07-19 14:35:40,580 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 8/16 -- train_loss: 0.3057 
+2022-07-19 14:35:46,326 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 9/16 -- train_loss: 0.3643 
+2022-07-19 14:35:52,151 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 10/16 -- train_loss: 0.3558 
+2022-07-19 14:35:57,893 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 11/16 -- train_loss: 0.2371 
+2022-07-19 14:36:03,763 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 12/16 -- train_loss: 0.2279 
+2022-07-19 14:36:09,514 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 13/16 -- train_loss: 0.3809 
+2022-07-19 14:36:15,353 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 14/16 -- train_loss: 0.2987 
+2022-07-19 14:36:21,089 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 15/16 -- train_loss: 0.5157 
+2022-07-19 14:36:26,863 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 16/16 -- train_loss: 0.3747 
+2022-07-19 14:36:26,864 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
+2022-07-19 14:36:26,864 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[10] Complete. Time taken: 00:01:33
+2022-07-19 14:36:26,864 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run complete. Time taken: 00:15:46

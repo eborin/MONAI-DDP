@@ -141,7 +141,7 @@ def train(args, local_rank):
         train_handlers += [LrScheduleHandler(lr_scheduler=scheduler, print_lr=True)]
 
     train_handlers += [
-        ValidationHandler(validator=evaluator, interval=interval, epoch_level=True),
+        # ValidationHandler(validator=evaluator, interval=interval, epoch_level=True),
         StatsHandler(
             tag_name="train_loss", output_transform=from_engine(["loss"], first=True)
         ),
