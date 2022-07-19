@@ -61,6 +61,7 @@ def train(args, local_rank):
         train_batch_size = data_loader_params[task_id]["batch_size"]
     else:
         train_batch_size = batch_size
+    print(f"Using batch size of {train_batch_size}")
 
     # set device
     if use_cpu:
