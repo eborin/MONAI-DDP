@@ -1,6 +1,4 @@
 #### Core packages
-torch
-torchvision
 monai[all]
 seaborn
 tqdm

@@ -1,7 +1,7 @@
 # ==================================================================
 # Image: Base
 # ==================================================================
-FROM nvidia/cuda:11.7.0-base-ubuntu20.04 AS base
+FROM nvidia/cuda:11.6.0-base-ubuntu20.04 AS base
 
 ENV LANG C.UTF-8
 ENV APT_INSTALL "apt-get install -y --no-install-recommends"
@@ -32,7 +32,10 @@ RUN $APT_INSTALL \
 # ------------------------------------------------------------------
 RUN $APT_INSTALL \
         python3-dev \
-        gcc
+        gcc && \
+    $PIP_INSTALL \
+        --pre torch torchvision torchaudio -f \
+        https://download.pytorch.org/whl/nightly/cu116/torch_nightly.html
 
 # ------------------------------------------------------------------
 # Installs project dependencies

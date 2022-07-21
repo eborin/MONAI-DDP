@@ -1,0 +1,36 @@
+2022-07-21 15:58:48,289 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run resuming from iteration 0, epoch 0 until 500 epochs
+2022-07-21 15:58:56,993 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 1/13 -- train_loss: 3.7238 
+2022-07-21 15:58:56,998 - torch.nn.parallel.distributed - INFO - Reducer buckets have been rebuilt in this iteration.
+2022-07-21 15:58:57,399 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 2/13 -- train_loss: 2.3443 
+2022-07-21 15:58:57,806 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 3/13 -- train_loss: 1.5450 
+2022-07-21 15:58:58,397 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 4/13 -- train_loss: 1.2773 
+2022-07-21 15:58:58,803 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 5/13 -- train_loss: 1.2152 
+2022-07-21 15:58:59,204 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 6/13 -- train_loss: 1.1962 
+2022-07-21 15:58:59,606 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 7/13 -- train_loss: 1.1868 
+2022-07-21 15:59:00,069 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 1/500, Iter: 8/13 -- train_loss: 1.1782 
+2022-07-21 15:59:05,548 - ignite.engine.engine.DynUNetTrainer - ERROR - Engine run is terminating due to exception: 
+2022-07-21 15:59:05,548 - ignite.engine.engine.DynUNetTrainer - ERROR - Exception: 
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/ignite/engine/engine.py", line 753, in _internal_run
+    time_taken = self._run_once_on_dataset()
+  File "/usr/local/lib/python3.8/dist-packages/ignite/engine/engine.py", line 840, in _run_once_on_dataset
+    self.state.output = self._process_function(self, self.state.batch)
+  File "/home/delucca/src/otavioon/MONAI-DDP/ddp/trainer.py", line 83, in _iteration
+    engine.fire_event(IterationEvents.MODEL_COMPLETED)
+  File "/usr/local/lib/python3.8/dist-packages/ignite/engine/engine.py", line 445, in fire_event
+    return self._fire_event(event_name)
+  File "/usr/local/lib/python3.8/dist-packages/ignite/engine/engine.py", line 421, in _fire_event
+    func(*first, *(event_args + others), **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/monai/engines/workflow.py", line 218, in _decollate_data
+    engine.state.output = transform(engine.state.output)
+  File "/usr/local/lib/python3.8/dist-packages/monai/transforms/inverse_batch_transform.py", line 153, in __call__
+    return decollate_batch(d, detach=self.detach, pad=self.pad_batch, fill_value=self.fill_value)
+  File "/usr/local/lib/python3.8/dist-packages/monai/data/utils.py", line 550, in decollate_batch
+    b, non_iterable, deco = _non_zipping_check(batch, detach, pad, fill_value)
+  File "/usr/local/lib/python3.8/dist-packages/monai/data/utils.py", line 457, in _non_zipping_check
+    _deco = {key: decollate_batch(batch_data[key], detach, pad=pad, fill_value=fill_value) for key in batch_data}
+  File "/usr/local/lib/python3.8/dist-packages/monai/data/utils.py", line 457, in <dictcomp>
+    _deco = {key: decollate_batch(batch_data[key], detach, pad=pad, fill_value=fill_value) for key in batch_data}
+  File "/usr/local/lib/python3.8/dist-packages/monai/data/utils.py", line 538, in decollate_batch
+    return batch.item() if detach else batch
+KeyboardInterrupt
