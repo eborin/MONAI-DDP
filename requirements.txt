@@ -1,6 +1,9 @@
 #### Core packages
+torch
+torchvision
 monai[all]
 seaborn
+tqdm
 
 #### Other tools (optional)
 # openpyxl
@@ -16,7 +19,7 @@ seaborn
 # isort
 
 #### Jupyter lab extensions (optional)
-jupyterlab
+# jupyterlab
 # jupyterlab-git
 # jupyterthemes
 # jupyterlab-code-formatter
