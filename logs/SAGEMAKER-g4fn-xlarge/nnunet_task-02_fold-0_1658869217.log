@@ -100,3 +100,5 @@
 2022-07-26 20:58:28,105 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
 2022-07-26 20:58:28,105 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[10] Complete. Time taken: 00:00:27
 2022-07-26 20:58:28,105 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run complete. Time taken: 00:04:25
+
+Billable seconds: 513
