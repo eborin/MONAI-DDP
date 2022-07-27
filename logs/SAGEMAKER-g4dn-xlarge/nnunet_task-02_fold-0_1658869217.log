@@ -101,4 +101,7 @@
 2022-07-26 20:58:28,105 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[10] Complete. Time taken: 00:00:27
 2022-07-26 20:58:28,105 - ignite.engine.engine.DynUNetTrainer - INFO - Engine run complete. Time taken: 00:04:25
 
+2022-07-26 20:58:48 Uploading - Uploading generated training model
+2022-07-26 20:58:48 Completed - Training job completed
+Training seconds: 513
 Billable seconds: 513
