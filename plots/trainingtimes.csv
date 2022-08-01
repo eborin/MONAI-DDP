@@ -1,0 +1,9 @@
+exp run duration
+IAAS-p2.xlarge 1  00:15:46
+IAAS-p2.xlarge 2  00:06:47
+SAGEMAKER-g4dn-xlarge 1  00:04:25
+SAGEMAKER-g4dn-xlarge 2  00:04:29
+SAGEMAKER-g4dn-xlarge 3  00:04:27
+SAGEMAKER-p3-2xlarge 1  00:01:50
+SAGEMAKER-p3-2xlarge 2  00:01:55
+SAGEMAKER-p3-2xlarge 3  00:01:51
