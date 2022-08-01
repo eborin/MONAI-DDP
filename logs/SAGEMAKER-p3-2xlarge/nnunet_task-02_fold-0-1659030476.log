@@ -94,8 +94,8 @@
 2022-07-28 17:45:05,935 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 2/8 -- train_loss: 0.7020 
 2022-07-28 17:45:07,212 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 3/8 -- train_loss: 0.3626 
 2022-07-28 17:45:08,464 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 4/8 -- train_loss: 0.4887 
-
-2022-07-28 17:45:23 Uploading - Uploading generated training model2022-07-28 17:45:09,709 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 5/8 -- train_loss: 0.7388 
+2022-07-28 17:45:23 Uploading - Uploading generated training model
+2022-07-28 17:45:09,709 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 5/8 -- train_loss: 0.7388 
 2022-07-28 17:45:10,957 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 6/8 -- train_loss: 0.2941 
 2022-07-28 17:45:12,216 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 7/8 -- train_loss: 0.7171 
 2022-07-28 17:45:13,465 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 8/8 -- train_loss: 0.4189 
