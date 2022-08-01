@@ -240,6 +240,8 @@ getwd()
 #+name: read-csv-data
 #+begin_src R :results output :exports both :noweb no-export
 ## do.init=TRUE
+<<do.init>>
+
 read.timings.csv <- function(fn)
 {
   read.table(fn, sep=" ", header=TRUE, stringsAsFactors=TRUE)
@@ -248,37 +250,87 @@ iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
 epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
 train.dt  <- read.timings.csv("plots/trainingtimes.csv")
 
-glimpse(iter.dt)
-glimpse(epoch.dt)
-glimpse(train.dt)
+# glimpse(iter.dt)
+# glimpse(epoch.dt)
+# glimpse(train.dt)
 #+end_src
 
 #+RESULTS: read-csv-data
-#+begin_example
-Rows: 770
-Columns: 10
-$ exp         <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xl…
-$ run         <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-$ start.date  <fct> 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19…
-$ start.time  <fct> 14:20:40.703, 14:20:40.703, 14:20:40.703, 14:20:40.703, 14…
-$ iter.date   <fct> 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19…
-$ iter.time   <fct> 14:20:48.325, 14:20:54.136, 14:20:59.778, 14:21:05.636, 14…
-$ epoch       <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2…
-$ epoch.total <int> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10…
-$ iter        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, …
-$ iter.total  <int> 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16…
-Rows: 80
-Columns: 4
-$ exp            <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2…
-$ run            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2…
-$ epoch          <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, …
-$ epoch.duration <fct> 00:01:34, 00:01:34, 00:01:34, 00:01:34, 00:01:34, 00:01…
-Rows: 8
-Columns: 3
-$ exp      <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, SAGEMAKER-g4dn-xlarge, SAGEMA…
-$ run      <int> 1, 2, 1, 2, 3, 1, 2, 3
-$ duration <fct> 00:15:46, 00:06:47, 00:04:25, 00:04:29, 00:04:27, 00:01:50, 0…
-#+end_example
 
 #+RESULTS:
+
+* Computing the duration of each iteration
+
+As all training sessions finished in the same day as they started, it is safe to ignore the dates in the log files.
+
+I'll need to subtract timings in the format HH:MM:SS.mmm. For this purpose, I'll
+implement functions to convert these timings to seconds or miliseconds, as shown
+in the code block below.
+
+#+name: fun-conv-timings
+#+begin_src R :results output :exports both :noweb no-export
+## t = "1:01:01.500"
+my.tsec <- function(t.str)
+{
+t.spstr = unlist(strsplit(t.str, ":"))
+t.spn = as.numeric(t.spstr)
+t.sec = (t.spn[1] * 60 + t.spn[2]) * 60 + t.spn[3]
+t.sec
+}
+my.tmsec <- function(t.str)
+{
+  my.tsec(t.str) * 1000
+}
+
+## secs = my.tsec(t)
+## msecs = my.tmsec(t)
+
+## secs
+## msecs
+
+#+end_src
+
+Next, we will create columns for the converted timings, the elapsed time at the end of each iteration, and their duration.
+
+#+name: calc-iter-timings
+#+begin_src R :results output :exports both :noweb no-export
+<<fun-conv-timings>>
+
+<<read-csv-data>>
+
+iter.dt %>%
+  data.frame %>%
+  mutate(start.sec = unlist(lapply(as.character(start.time), my.tsec)),
+         iter.sec = unlist(lapply(as.character(iter.time), my.tsec)),
+         iter.elapsed = iter.sec - start.sec,
+         iter.dur = iter.elapsed - lag(iter.elapsed, default = 0)) -> iter.dt
+  head(iter.dt)
+#+end_src
+
+#+RESULTS: calc-iter-timings
+#+begin_example
+             exp run start.date   start.time  iter.date    iter.time epoch
+1 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:20:48.325     1
+2 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:20:54.136     1
+3 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:20:59.778     1
+4 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:21:05.636     1
+5 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:21:11.394     1
+6 IAAS-p2.xlarge   1 2022-07-19 14:20:40.703 2022-07-19 14:21:17.306     1
+  epoch.total iter iter.total start.sec iter.sec iter.elapsed iter.dur
+1          10    1         16   51640.7 51648.32        7.622    7.622
+2          10    2         16   51640.7 51654.14       13.433    5.811
+3          10    3         16   51640.7 51659.78       19.075    5.642
+4          10    4         16   51640.7 51665.64       24.933    5.858
+5          10    5         16   51640.7 51671.39       30.691    5.758
+6          10    6         16   51640.7 51677.31       36.603    5.912
+#+end_example
+
+* Plots
+
+** Iteration times
+
+** Epoch times
+
+** Training times
+
 
