@@ -12,22 +12,10 @@
 #+select_tags: export
 #+exclude_tags: noexport
 #+startup: overview indent
-#+property: header-args:R :output-dir "./img" :session 202208-dl-cloud
+#+property: header-args:R :output-dir "./img" :session 202208-dl-cloud :datadir "./plots"
 #+property: datadir "../logs"
 
-* Loading packages
 
-#+name: load-r-packages
-#+begin_src R :results output :exports both :noweb no-export
-suppressMessages(library(data.table))
-suppressMessages(library(tidyverse))
-options(crayon.enabled = FALSE)
-options(dplyr.sumarise.inform = FALSE)
-options(tidyverse.quiet = TRUE)
-options(dplyr.summarise.inform = FALSE)
-#+end_src
-
-#+RESULTS: load-r-packages
 
 * Pre-processing the data from the training logs
 
@@ -179,7 +167,6 @@ SAGEMAKER-p3-2xlarge 3 9 00:00:11
 SAGEMAKER-p3-2xlarge 3 10 00:00:11
 #+end_example
 
-
 ** Total training times
 
 #+begin_src shell :results output :exports both
@@ -209,4 +196,89 @@ cat "$outfile"
 : SAGEMAKER-p3-2xlarge 2 00:01:55
 : SAGEMAKER-p3-2xlarge 3 00:01:51
 
+
+* Loading R packages
+
+#+name: load-r-packages
+#+begin_src R :results output :exports both :noweb no-export
+suppressMessages(library(data.table))
+suppressMessages(library(tidyverse))
+options(crayon.enabled = FALSE)
+options(dplyr.sumarise.inform = FALSE)
+options(tidyverse.quiet = TRUE)
+options(dplyr.summarise.inform = FALSE)
+#+end_src
+
+#+RESULTS: load-r-packages
+
+
+* Reading the data into R
+
+#+name: do_init
+#+begin_src R :results output :exports both :noweb no-export
+func.init <- function()
+{
+  <<load-r-packages>>
+}
+
+if((!exists("do.init")) | do.init == TRUE){
+  func.init()
+  do.init=FALSE
+}
+#+end_src
+
+#+RESULTS: do_init
+
+#+begin_src R :results output :exports both :noweb no-export
+getwd()
+#+end_src
+
+#+RESULTS:
+: [1] "/home/rktesser/work/pos-doutorado/repositories/MONAI-DDP"
+
+
+#+name: read-csv-data
+#+begin_src R :results output :exports both :noweb no-export
+## do.init=TRUE
+read.timings.csv <- function(fn)
+{
+  read.table(fn, sep=" ", header=TRUE, stringsAsFactors=TRUE)
+}
+## iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
+## epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
+train.dt  <- read.timings.csv("plots/trainingtimes.csv")
+
+glimpse(iter.dt)
+glimpse(epoch.dt)
+glimpse(train.dt)
+#+end_src
+
+#+RESULTS: read-csv-data
+#+begin_example
+Rows: 770
+Columns: 10
+$ exp         <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xl…
+$ run         <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ start.date  <fct> 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19…
+$ start.time  <fct> 14:20:40.703, 14:20:40.703, 14:20:40.703, 14:20:40.703, 14…
+$ iter.date   <fct> 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19, 2022-07-19…
+$ iter.time   <fct> 14:20:48.325, 14:20:54.136, 14:20:59.778, 14:21:05.636, 14…
+$ epoch       <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2…
+$ epoch.total <int> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10…
+$ iter        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, …
+$ iter.total  <int> 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16…
+Rows: 80
+Columns: 4
+$ exp            <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2.xlarge, IAAS-p2…
+$ run            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2…
+$ epoch          <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, …
+$ epoch.duration <fct> 00:01:34, 00:01:34, 00:01:34, 00:01:34, 00:01:34, 00:01…
+Rows: 8
+Columns: 3
+$ exp      <fct> IAAS-p2.xlarge, IAAS-p2.xlarge, SAGEMAKER-g4dn-xlarge, SAGEMA…
+$ run      <int> 1, 2, 1, 2, 3, 1, 2, 3
+$ duration <fct> 00:15:46, 00:06:47, 00:04:25, 00:04:29, 00:04:27, 00:01:50, 0…
+#+end_example
+
+#+RESULTS:
 
