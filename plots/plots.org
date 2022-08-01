@@ -189,12 +189,9 @@ for d in ../logs/*/;do
 	 exp="$(basename $d)"
 	 nexp=1
 	 for f in ${d}/*.log; do
-	     #echo "$exp","$nexp"
-	     #echo "$f"
 	     
-	     egrep "Engine run complete.*" "$f" | cut -d " " -f 13 | sed -e "s/\(.*\)/${exp} ${nexp}  \1/g"
+	     egrep "Engine run complete.*" "$f" | cut -d " " -f 13 | sed -e "s/\(.*\)/${exp} ${nexp} \1/g"
 	     
-	     ## egrep "Epoch.*Iter:" "$f" | sed -e "s/\(.*\) - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: \([^\/]*\)\/\([^,]*\), Iter: \([^\/]*\)\/\([^ ]*\) .*/${exp} ${nexp} ${start} \1 \2 \3 \4 \5/g" -e "s/,/\./g"
 	     nexp=$((nexp + 1))
 	 done
 done >> "$outfile"
@@ -203,12 +200,13 @@ cat "$outfile"
 
 #+RESULTS:
 : exp run duration
-: IAAS-p2.xlarge 1  00:15:46
-: IAAS-p2.xlarge 2  00:06:47
-: SAGEMAKER-g4dn-xlarge 1  00:04:25
-: SAGEMAKER-g4dn-xlarge 2  00:04:29
-: SAGEMAKER-g4dn-xlarge 3  00:04:27
-: SAGEMAKER-p3-2xlarge 1  00:01:50
-: SAGEMAKER-p3-2xlarge 2  00:01:55
-: SAGEMAKER-p3-2xlarge 3  00:01:51
+: IAAS-p2.xlarge 1 00:15:46
+: IAAS-p2.xlarge 2 00:06:47
+: SAGEMAKER-g4dn-xlarge 1 00:04:25
+: SAGEMAKER-g4dn-xlarge 2 00:04:29
+: SAGEMAKER-g4dn-xlarge 3 00:04:27
+: SAGEMAKER-p3-2xlarge 1 00:01:50
+: SAGEMAKER-p3-2xlarge 2 00:01:55
+: SAGEMAKER-p3-2xlarge 3 00:01:51
+
 
