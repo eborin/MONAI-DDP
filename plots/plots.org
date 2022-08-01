@@ -244,8 +244,8 @@ read.timings.csv <- function(fn)
 {
   read.table(fn, sep=" ", header=TRUE, stringsAsFactors=TRUE)
 }
-## iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
-## epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
+iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
+epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
 train.dt  <- read.timings.csv("plots/trainingtimes.csv")
 
 glimpse(iter.dt)
