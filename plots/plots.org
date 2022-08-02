@@ -750,6 +750,115 @@ epoch.dt %>%
 
 ** Total training times
 
+*** Reading the data
+
+#+name: read-training-times
+#+begin_src R :results output :exports both :noweb no-export
+<<fun-conv-timings>>
+
+<<read-csv-data>>
+
+train.dt %>%
+  data.frame %>%
+  mutate(train.sec = unlist(lapply(as.character(duration), my.tsec))
+           ) -> train.dt
+
+train.dt
+#+end_src
+
+#+RESULTS: read-training-times
+#+begin_example
+                        exp run duration train.sec
+1          IAAS-g4dn.xlarge   1 00:07:49       469
+2          IAAS-g4dn.xlarge   2 00:07:28       448
+3          IAAS-g4dn.xlarge   3 00:07:24       444
+4            IAAS-p2.xlarge   1 00:19:14      1154
+5            IAAS-p2.xlarge   2 00:19:14      1154
+6            IAAS-p2.xlarge   3 00:18:37      1117
+7           IAAS-p3.2xlarge   1 00:04:43       283
+8           IAAS-p3.2xlarge   2 00:04:09       249
+9           IAAS-p3.2xlarge   3 00:04:06       246
+10 SAGEMAKER-ml-g4dn-xlarge   1 00:04:25       265
+11 SAGEMAKER-ml-g4dn-xlarge   2 00:04:29       269
+12 SAGEMAKER-ml-g4dn-xlarge   3 00:04:27       267
+13  SAGEMAKER-ml-p3-2xlarge   1 00:01:50       110
+14  SAGEMAKER-ml-p3-2xlarge   2 00:01:55       115
+15  SAGEMAKER-ml-p3-2xlarge   3 00:01:51       111
+#+end_example
+
+*** Plotting
+
+#+name: plot-train-func
+#+begin_src R :results output :exports both :noweb no-export
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+lbl.exp.1l <- c("IaaS g4dn.xlarge", "IaaS p2.xlarge", "IaaS p3.2xlarge", "SageMaker ml.g4dn.xlarge", "SageMaker ml.p3.2xlarge")
+names(lbl.exp.1l) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.train.times <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = run, y = train.sec, color = exp)) +
+    geom_line() +
+    scale_x_continuous(name = "Executions", breaks = seq(0,10,1)) +
+    scale_y_continuous(name = "Training time (s)", limits = c(0,NA)) +
+    scale_color_discrete(name = "Environment", labels = lbl.exp.1l)  +
+    guides(color = guide_legend(nrow=3), byrow=FALSE) +
+    theme_bw() +
+    theme(legend.position = "top")
+}
+
+plot.train.times.col <- function(dt, scl = "fixed")
+{
+  dt %>%
+    mutate(run = factor(run)) %>%
+    ggplot(aes(x = exp, y = train.sec, fill = run)) +
+    geom_col(position = position_dodge()) +
+    scale_x_discrete(name = "Environment", labels = lbl.exp) +
+    scale_y_continuous(name = "Training time (s)", limits = c(0,NA)) +
+    scale_fill_discrete(name = "Executions") +
+    theme_bw()
+}
+
+#+end_src
+
+#+RESULTS: plot-train-func
+
+
+#+begin_src R :results output graphics file :file training-times.png :exports both :width  450 :height 300 :noweb no-export
+
+<<read-training-times>>
+
+<<plot-train-func>>
+
+train.dt %>%
+  ## mutate(run = factor(run)) %>%
+  plot.train.times(scl = "fixed") 
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/training-times.png]]
+
+
+#+begin_src R :results output graphics file :file epoch-times-bars.png :exports both :width 450 :height 300 :noweb no-export
+
+<<read-training-times>>
+
+<<plot-train-func>>
+
+train.dt %>%
+  ## mutate(run = factor(run)) %>%
+  plot.train.times.col(scl = "fixed") +
+  theme(legend.position = c(0.9,0.8))
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-bars.png]]
+
+
 * Scratchpad
 
 
