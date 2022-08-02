@@ -689,6 +689,64 @@ epoch.dt %>%
 #+RESULTS:
 [[file:./img/epoch-times-no-first-epoch-free-scale.png]]
 
+**** With horizontal facets (one plot per column)
+
+All epochs:
+
+#+begin_src R :results output graphics file :file epoch-times-columns.png :exports both :width 600 :height 200 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.epoch.times.cols <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = epoch, y = epoch.sec, group = run, color=run)) +
+    geom_line() +
+    facet_grid(cols = vars(exp), scales = scl,
+                labeller = labeller(exp = lbl.exp)) +
+    ## facet_grid(rows = vars(exp), scales = scl,
+    ##            labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Epoch number", breaks = seq(0,10,1)) +
+    scale_y_continuous(name = "Epoch time (s)", limits = c(0,NA)) +
+    scale_color_discrete(name = "Run")
+}
+
+epoch.dt %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times.cols(scl = "fixed") +
+  theme_bw() +
+  theme(legend.position = "top")
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-columns.png]]
+
+
+
+Without the first epoch:
+
+#+begin_src R :results output graphics file :file epoch-times-columns-no-first-epoch.png :exports both :width 600 :height 200 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+epoch.dt %>%
+  filter(epoch != 1) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times.cols(scl = "fixed") +
+  theme_bw() +
+  theme(legend.position = "top")
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-columns-no-first-epoch.png]]
 
 ** Total training times
 
