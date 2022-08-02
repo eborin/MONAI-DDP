@@ -389,40 +389,159 @@ write.csv(iter.dt, "iteration-times-processed.csv")
 Before running this code, you should run the code in
 
 #+begin_src R :results output graphics file :file iteration-times.png :exports both :width 600 :height 600 :noweb no-export
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.iter.times <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    facet_grid(cols = vars(run), rows = vars(exp), scales=scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
 iter.dt %>%
   mutate(epoch = factor(epoch)) %>%
-  ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
-  geom_line() +
-  facet_grid(cols = vars(run), rows = vars(exp))
+  plot.iter.times() +
+  theme_bw()
 #+end_src
 
 #+RESULTS:
 [[file:./img/iteration-times.png]]
 
 
+Plot without the first iteration of the first epoch:
+
 #+begin_src R :results output graphics file :file iteration-times-no-1st-iter.png :exports both :width 600 :height 600 :noweb no-export
 iter.dt %>%
   filter(!(epoch == 1 & iter == 1)) %>%
   mutate(epoch = factor(epoch)) %>%
-  ggplot(aes(x = iter, y = iter.dur, group = epoch, color = epoch)) +
-  geom_line() +
-  facet_grid(cols = vars(run), rows = vars(exp))
+  plot.iter.times() +
+  theme_bw()
 #+end_src
 
 #+RESULTS:
 [[file:./img/iteration-times-no-1st-iter.png]]
 
+
+Plot with free /y/ scale:
+
 #+begin_src R :results output graphics file :file iteration-times-no-1st-iter-freescale.png :exports both :width 600 :height 600 :noweb no-export
 iter.dt %>%
   filter(!(epoch == 1 & iter == 1)) %>%
   mutate(epoch = factor(epoch)) %>%
-  ggplot(aes(x = iter, y = iter.dur, group=epoch, color = epoch)) +
-  geom_line() +
-  facet_grid(cols = vars(run), rows = vars(exp), scales="free_y")
+  plot.iter.times(scl = "free_y") +
+  theme_bw()
 #+end_src
 
 #+RESULTS:
 [[file:./img/iteration-times-no-1st-iter-freescale.png]]
+
+
+Plotting only a few executions:
+#+begin_src R :results output graphics file :file iteration-times-few-runs.png  :exports both :width 600 :height 400 :noweb no-export
+plot.iter.times.v2 <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    facet_grid(cols = vars(exp), scales=scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("IAAS-g4dn.xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+iter.dt %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v2(scl = "free") +
+  theme_bw() 
+  
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-few-runs.png]]
+
+Plotting only a few executions:
+#+begin_src R :results output graphics file :file iteration-times-single-iaasg4dnxlarge.png  :exports both :width 600 :height 400 :noweb no-export
+plot.iter.times.v3 <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    ## facet_grid(cols = vars(exp), scales=scl,
+    ##            labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("IAAS-g4dn.xlarge")
+
+iter.dt %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() -> p1
+
+iter.dt %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+    ) -> p2
+
+p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
+                       ymin = 10, ymax = 125)
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-single-iaasg4dnxlarge.png]]
+
+#+begin_src R :results output graphics file :file iteration-times-single-sm-mlp3.2xlarge.png  :exports both :width 600 :height 400 :noweb no-export
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("SAGEMAKER-ml-p3-2xlarge")
+
+iter.dt %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw()
+
+iter.dt %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+    ) -> p2
+
+p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
+                       ymin = 10, ymax = 125)
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-single-sm-mlp3.2xlarge.png]]
 
 
 ** Epoch times
@@ -479,3 +598,14 @@ iter.dt %>% filter(epoch==1 & iter==1) %>% select(exp, run, epoch, iter, iter.el
 15 SAGEMAKER-ml-p3-2xlarge      3     1     1         7.51     7.51
 #+end_example
 
+#+begin_src R :results output :exports both :noweb no-export
+lbl.exp
+#+end_src
+
+#+RESULTS:
+:           IaaS g4dn.xlarge             IaaS p2.xlarge 
+:         "IAAS-g4dn.xlarge"           "IAAS-p2.xlarge" 
+:            IaaS p3.2xlarge   SageMaker ml.g4dn.xlarge 
+:          "IAAS-p3.2xlarge" "SAGEMAKER-ml-g4dn-xlarge" 
+:    SageMaker ml.p3.2xlarge 
+:  "SAGEMAKER-ml-p3-2xlarge"
