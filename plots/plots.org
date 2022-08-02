@@ -304,9 +304,8 @@ train.dt  <- read.timings.csv("plots/trainingtimes.csv")
 
 #+RESULTS:
 
-* Computing the duration of each iteration
 
-As all training sessions finished in the same day as they started, it is safe to ignore the dates in the log files.
+* Helper functions
 
 I'll need to subtract timings in the format HH:MM:SS.mmm. For this purpose, I'll
 implement functions to convert these timings to seconds or miliseconds, as shown
@@ -335,7 +334,17 @@ my.tmsec <- function(t.str)
 
 #+end_src
 
-Next, we will create columns for the converted timings, the elapsed time at the end of each iteration, and their duration.
+
+* Plots
+
+** Iteration times
+*** Computing the duration of each iteration
+
+As all training sessions finished in the same day as they started, it is safe to
+ignore the dates in the log files.
+
+Next, we will create columns for the converted timings from hour format to seconds,
+the elapsed time at the end of each iteration, and their duration.
 
 #+name: calc-iter-timings
 #+begin_src R :results output :exports both :noweb no-export
@@ -370,9 +379,7 @@ iter.dt %>%
 6          10    6         16   51640.7 51677.31       36.603    5.912
 #+end_example
 
-* Plots
-
-** Iteration times
+*** Plotting
 
 ** Epoch times
 
