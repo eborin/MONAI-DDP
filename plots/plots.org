@@ -383,7 +383,47 @@ write.csv(iter.dt, "iteration-times-processed.csv")
 #+RESULTS:
 
 
+
 *** Plotting
+
+Before running this code, you should run the code in
+
+#+begin_src R :results output graphics file :file iteration-times.png :exports both :width 600 :height 600 :noweb no-export
+iter.dt %>%
+  mutate(epoch = factor(epoch)) %>%
+  ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+  geom_line() +
+  facet_grid(cols = vars(run), rows = vars(exp))
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times.png]]
+
+
+#+begin_src R :results output graphics file :file iteration-times-no-1st-iter.png :exports both :width 600 :height 600 :noweb no-export
+iter.dt %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  ggplot(aes(x = iter, y = iter.dur, group = epoch, color = epoch)) +
+  geom_line() +
+  facet_grid(cols = vars(run), rows = vars(exp))
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-no-1st-iter.png]]
+
+#+begin_src R :results output graphics file :file iteration-times-no-1st-iter-freescale.png :exports both :width 600 :height 600 :noweb no-export
+iter.dt %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  ggplot(aes(x = iter, y = iter.dur, group=epoch, color = epoch)) +
+  geom_line() +
+  facet_grid(cols = vars(run), rows = vars(exp), scales="free_y")
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-no-1st-iter-freescale.png]]
+
 
 ** Epoch times
 
