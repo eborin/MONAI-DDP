@@ -324,32 +324,53 @@ the elapsed time at the end of each iteration, and their duration.
 
 <<read-csv-data>>
 
+exp.list <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
 iter.dt %>%
   data.frame %>%
+  filter(exp %in% exp.list) %>%
   mutate(start.sec = unlist(lapply(as.character(start.time), my.tsec)),
          iter.sec = unlist(lapply(as.character(iter.time), my.tsec)),
          iter.elapsed = iter.sec - start.sec) %>%
-  group_by(exp, run) %>%
+  group_by(exp, batch.size, run) %>%
   mutate(iter.dur = iter.elapsed - lag(iter.elapsed, default = 0)) %>%
-  ungroup() -> iter.dt
-  head(iter.dt)
+  ungroup() %>% data.table -> iter.dt
+  summary(iter.dt)
 #+end_src
 
 #+RESULTS: calc-iter-timings
 #+begin_example
-# A tibble: 6 × 14
-  exp            run start…¹ start…² iter.…³ iter.…⁴ epoch epoch…⁵  iter iter.…⁶
-  <fct>        <int> <fct>   <fct>   <fct>   <fct>   <int>   <int> <int>   <int>
-1 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     1      16
-2 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     2      16
-3 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     3      16
-4 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     4      16
-5 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     5      16
-6 IAAS-g4dn.x…     1 2022-0… 10:47:… 2022-0… 10:49:…     1      10     6      16
-# … with 4 more variables: start.sec <dbl>, iter.sec <dbl>, iter.elapsed <dbl>,
-#   iter.dur <dbl>, and abbreviated variable names ¹​start.date, ²​start.time,
-#   ³​iter.date, ⁴​iter.time, ⁵​epoch.total, ⁶​iter.total
-# ℹ Use `colnames()` to see all variable names
+                       exp        batch.size         run         start.date  
+ IAAS-g3s.xlarge         :  0   Min.   :1.000   Min.   :1   2022-07-26:  80  
+ IAAS-g4dn.xlarge        :480   1st Qu.:1.000   1st Qu.:1   2022-07-27: 160  
+ IAAS-g5.xlarge          :  0   Median :1.000   Median :2   2022-07-28: 240  
+ IAAS-p2.xlarge          :480   Mean   :1.167   Mean   :2   2022-08-02:2400  
+ IAAS-p3.2xlarge         :480   3rd Qu.:1.000   3rd Qu.:3                    
+ SAGEMAKER-ml-g4dn-xlarge:720   Max.   :2.000   Max.   :3                    
+ SAGEMAKER-ml-p3-2xlarge :720                                                
+        start.time        iter.date           iter.time        epoch     
+ 10:47:41.187: 160   2022-07-26:  80   12:43:14.584:   2   Min.   : 1.0  
+ 10:47:41.204: 160   2022-07-27: 160   10:49:46.269:   1   1st Qu.: 3.0  
+ 10:47:41.206: 160   2022-07-28: 240   10:49:46.273:   1   Median : 5.5  
+ 11:25:52.599: 160   2022-08-02:2400   10:49:46.323:   1   Mean   : 5.5  
+ 11:30:12.898: 160                     10:49:48.091:   1   3rd Qu.: 8.0  
+ 12:01:57.830: 160                     10:49:48.200:   1   Max.   :10.0  
+ (Other)     :1920                     (Other)     :2873                 
+  epoch.total      iter          iter.total      start.sec        iter.sec    
+ Min.   :10   Min.   : 1.000   Min.   : 8.00   Min.   :38861   Min.   :38986  
+ 1st Qu.:10   1st Qu.: 4.000   1st Qu.:16.00   1st Qu.:41413   1st Qu.:42183  
+ Median :10   Median : 7.000   Median :16.00   Median :54135   Median :54263  
+ Mean   :10   Mean   : 7.833   Mean   :14.67   Mean   :56119   Mean   :56365  
+ 3rd Qu.:10   3rd Qu.:12.000   3rd Qu.:16.00   3rd Qu.:70841   3rd Qu.:71088  
+ Max.   :10   Max.   :16.000   Max.   :16.00   Max.   :75244   Max.   :75508  
+                                                                              
+  iter.elapsed         iter.dur      
+ Min.   :   5.995   Min.   :  0.586  
+ 1st Qu.:  86.248   1st Qu.:  0.679  
+ Median : 187.930   Median :  1.964  
+ Mean   : 245.340   Mean   :  2.789  
+ 3rd Qu.: 286.957   3rd Qu.:  3.144  
+ Max.   :1154.465   Max.   :188.090
 #+end_example
 
 #+begin_src R :results output :exports both :noweb no-export
@@ -359,10 +380,7 @@ write.csv(iter.dt, "iteration-times-processed.csv")
 #+RESULTS:
 
 
-
-*** Plotting
-
-Before running this code, you should run the code in
+*** Plots for BS=1
 
 #+begin_src R :results output graphics file :file iteration-times.png :exports both :width 600 :height 600 :noweb no-export
 
@@ -382,6 +400,7 @@ plot.iter.times <- function(dt, scl="fixed")
 }
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   mutate(epoch = factor(epoch)) %>%
   plot.iter.times() +
   theme_bw()
@@ -409,6 +428,7 @@ Plot with free /y/ scale:
 
 #+begin_src R :results output graphics file :file iteration-times-no-1st-iter-freescale.png :exports both :width 600 :height 600 :noweb no-export
 iter.dt %>%
+  filter(batch.size == 1) %>%
   filter(!(epoch == 1 & iter == 1)) %>%
   mutate(epoch = factor(epoch)) %>%
   plot.iter.times(scl = "free_y") +
@@ -437,6 +457,7 @@ plot.iter.times.v2 <- function(dt, scl = "fixed")
 exps <- c("IAAS-g4dn.xlarge", "SAGEMAKER-ml-p3-2xlarge")
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   #filter(!(epoch == 1 & iter == 1) 1) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
@@ -466,6 +487,7 @@ plot.iter.times.v3 <- function(dt, scl = "fixed")
 exps <- c("IAAS-g4dn.xlarge")
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   #filter(!(epoch == 1 & iter == 1) 1) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
@@ -473,6 +495,7 @@ iter.dt %>%
   theme_bw() -> p1
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   filter(!(epoch == 1 & iter == 1)) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
@@ -495,6 +518,7 @@ p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
 exps <- c("SAGEMAKER-ml-p3-2xlarge")
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   #filter(!(epoch == 1 & iter == 1) 1) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
@@ -502,6 +526,7 @@ iter.dt %>%
   theme_bw()
 
 iter.dt %>%
+  filter(batch.size == 1) %>%
   filter(!(epoch == 1 & iter == 1)) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
@@ -530,8 +555,11 @@ p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
 
 <<read-csv-data>>
 
+exp.list <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
 epoch.dt %>%
   data.frame %>%
+  filter(exp %in% exp.list) %>%
   mutate(epoch.sec = unlist(lapply(as.character(epoch.duration), my.tsec))
            ) -> epoch.dt
 
@@ -539,16 +567,17 @@ glimpse(epoch.dt)
 #+end_src
 
 #+RESULTS: read-epoch-times
-: Rows: 150
-: Columns: 5
+: Rows: 210
+: Columns: 6
 : $ exp            <fct> IAAS-g4dn.xlarge, IAAS-g4dn.xlarge, IAAS-g4dn.xlarge, I…
+: $ batch.size     <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 : $ run            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2…
 : $ epoch          <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, …
 : $ epoch.duration <fct> 00:02:34, 00:00:32, 00:00:34, 00:00:36, 00:00:36, 00:00…
 : $ epoch.sec      <dbl> 154, 32, 34, 36, 36, 35, 36, 35, 36, 35, 153, 31, 32, 3…
 
 
-*** Plotting
+*** Plots for BS=1
 
 #+begin_src R :results output graphics file :file epoch-times.png :exports both :width 600 :height 400 :noweb no-export
 
@@ -572,6 +601,7 @@ plot.epoch.times <- function(dt, scl="fixed")
 }
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times(scl = "fixed") +
   theme_bw()
@@ -589,6 +619,7 @@ lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMa
 names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times(scl = "free") +
   theme_bw()
@@ -605,6 +636,7 @@ lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMa
 names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   filter(epoch != 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times(scl = "fixed") +
@@ -623,6 +655,7 @@ names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SA
 
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   filter(epoch != 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times(scl = "free") +
@@ -658,6 +691,7 @@ plot.epoch.times.cols <- function(dt, scl="fixed")
 }
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times.cols(scl = "fixed") +
   theme_bw() +
@@ -680,6 +714,7 @@ lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMa
 names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
 
 epoch.dt %>%
+  filter(batch.size == 1) %>%
   filter(epoch != 1) %>%
   mutate(run = factor(run)) %>%
   plot.epoch.times.cols(scl = "fixed") +
@@ -692,7 +727,6 @@ epoch.dt %>%
 [[file:./img/epoch-times-columns-no-first-epoch.png]]
 
 ** Total training times
-
 *** Reading the data
 
 #+name: read-training-times
@@ -700,36 +734,44 @@ epoch.dt %>%
 <<fun-conv-timings>>
 
 <<read-csv-data>>
+exp.list <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
 
 train.dt %>%
   data.frame %>%
+  filter(exp %in% exp.list) %>%
   mutate(train.sec = unlist(lapply(as.character(duration), my.tsec))
-           ) -> train.dt
+         ) -> train.dt
 
 train.dt
 #+end_src
 
 #+RESULTS: read-training-times
 #+begin_example
-                        exp run duration train.sec
-1          IAAS-g4dn.xlarge   1 00:07:49       469
-2          IAAS-g4dn.xlarge   2 00:07:28       448
-3          IAAS-g4dn.xlarge   3 00:07:24       444
-4            IAAS-p2.xlarge   1 00:19:14      1154
-5            IAAS-p2.xlarge   2 00:19:14      1154
-6            IAAS-p2.xlarge   3 00:18:37      1117
-7           IAAS-p3.2xlarge   1 00:04:43       283
-8           IAAS-p3.2xlarge   2 00:04:09       249
-9           IAAS-p3.2xlarge   3 00:04:06       246
-10 SAGEMAKER-ml-g4dn-xlarge   1 00:04:25       265
-11 SAGEMAKER-ml-g4dn-xlarge   2 00:04:29       269
-12 SAGEMAKER-ml-g4dn-xlarge   3 00:04:27       267
-13  SAGEMAKER-ml-p3-2xlarge   1 00:01:50       110
-14  SAGEMAKER-ml-p3-2xlarge   2 00:01:55       115
-15  SAGEMAKER-ml-p3-2xlarge   3 00:01:51       111
+                        exp batch.size run duration train.sec
+1          IAAS-g4dn.xlarge          1   1 00:07:49       469
+2          IAAS-g4dn.xlarge          1   2 00:07:28       448
+3          IAAS-g4dn.xlarge          1   3 00:07:24       444
+4            IAAS-p2.xlarge          1   1 00:19:14      1154
+5            IAAS-p2.xlarge          1   2 00:19:14      1154
+6            IAAS-p2.xlarge          1   3 00:18:37      1117
+7           IAAS-p3.2xlarge          1   1 00:04:43       283
+8           IAAS-p3.2xlarge          1   2 00:04:09       249
+9           IAAS-p3.2xlarge          1   3 00:04:06       246
+10 SAGEMAKER-ml-g4dn-xlarge          2   1 00:04:25       265
+11 SAGEMAKER-ml-g4dn-xlarge          2   2 00:04:29       269
+12 SAGEMAKER-ml-g4dn-xlarge          2   3 00:04:27       267
+13 SAGEMAKER-ml-g4dn-xlarge          1   1 00:05:22       322
+14 SAGEMAKER-ml-g4dn-xlarge          1   2 00:05:27       327
+15 SAGEMAKER-ml-g4dn-xlarge          1   3 00:05:30       330
+16  SAGEMAKER-ml-p3-2xlarge          2   1 00:01:50       110
+17  SAGEMAKER-ml-p3-2xlarge          2   2 00:01:55       115
+18  SAGEMAKER-ml-p3-2xlarge          2   3 00:01:51       111
+19  SAGEMAKER-ml-p3-2xlarge          1   1 00:01:59       119
+20  SAGEMAKER-ml-p3-2xlarge          1   2 00:01:57       117
+21  SAGEMAKER-ml-p3-2xlarge          1   3 00:01:56       116
 #+end_example
 
-*** Plotting
+*** Plots for BS=1
 
 #+name: plot-train-func
 #+begin_src R :results output :exports both :noweb no-export
@@ -776,6 +818,7 @@ plot.train.times.col <- function(dt, scl = "fixed")
 <<plot-train-func>>
 
 train.dt %>%
+  filter(batch.size == 1) %>%
   ## mutate(run = factor(run)) %>%
   plot.train.times(scl = "fixed") 
 
@@ -792,6 +835,7 @@ train.dt %>%
 <<plot-train-func>>
 
 train.dt %>%
+  filter(batch.size == 1) %>%
   ## mutate(run = factor(run)) %>%
   plot.train.times.col(scl = "fixed") +
   theme(legend.position = c(0.9,0.8))
@@ -800,7 +844,6 @@ train.dt %>%
 
 #+RESULTS:
 [[file:./img/epoch-times-bars.png]]
-
 
 ** Billed time and costs
 
@@ -859,7 +902,6 @@ bill.dt
 14 22.503750
 15 25.245000
 #+end_example
-
 
 
 *** Plotting the billed times
