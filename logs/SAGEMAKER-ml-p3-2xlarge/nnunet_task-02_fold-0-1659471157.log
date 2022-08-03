@@ -175,8 +175,8 @@
 2022-08-02 20:11:24,256 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 12/16 -- train_loss: 0.2806 
 2022-08-02 20:11:24,928 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 13/16 -- train_loss: 0.3648 
 2022-08-02 20:11:25,606 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 14/16 -- train_loss: 0.3706 
-
-2022-08-02 20:11:37 Uploading - Uploading generated training model2022-08-02 20:11:26,282 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 15/16 -- train_loss: 0.2404 
+2022-08-02 20:11:37 Uploading - Uploading generated training model
+2022-08-02 20:11:26,282 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 15/16 -- train_loss: 0.2404 
 2022-08-02 20:11:26,951 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: 10/10, Iter: 16/16 -- train_loss: 0.4348 
 2022-08-02 20:11:26,952 - ignite.engine.engine.DynUNetTrainer - INFO - Key metric: None best value: -1 at epoch: -1
 2022-08-02 20:11:26,952 - ignite.engine.engine.DynUNetTrainer - INFO - Epoch[10] Complete. Time taken: 00:00:11
