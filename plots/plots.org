@@ -15,8 +15,6 @@
 #+property: header-args:R :output-dir "./img" :session 202208-dl-cloud :datadir "./plots"
 #+property: datadir "../logs"
 
-
-
 * Pre-processing the data from the training logs
 
 ** Iteration times
@@ -25,7 +23,7 @@ The following code extracts the iteration times.
 
 #+begin_src shell :results output :exports both
 outfile="itertimes.csv"
-echo exp run start.date start.time iter.date iter.time epoch epoch.total iter iter.total > "$outfile"
+echo exp  batch.size run start.date start.time iter.date iter.time epoch epoch.total iter iter.total > "$outfile"
 for d in ../logs/*/;do
 	 exp="$(basename $d)"
 	 nexp=1
@@ -35,8 +33,10 @@ for d in ../logs/*/;do
 	     start="$(grep "Engine run resuming" "$f" | cut -d " " -f -2)"
 	     # All experiments finihed in the same day they started.
 	     # So, we can ignore their dates when computing the timings
-	
-	     egrep "Epoch.*Iter:" "$f" | sed -e "s/\(.*\) - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: \([^\/]*\)\/\([^,]*\), Iter: \([^\/]*\)\/\([^ ]*\) .*/${exp} ${nexp} ${start} \1 \2 \3 \4 \5/g" -e "s/,/\./g"
+
+	     if grep -q 16/16 $f; then bs=1; else bs=2; fi
+	     
+	     egrep "Epoch.*Iter:" "$f" | sed -e "s/\(.*\) - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: \([^\/]*\)\/\([^,]*\), Iter: \([^\/]*\)\/\([^ ]*\) .*/${exp} ${bs} ${nexp} ${start} \1 \2 \3 \4 \5/g" -e "s/,/\./g"
 	     nexp=$((nexp + 1))
 	 done
 done >> "$outfile"
@@ -47,206 +47,70 @@ head "$outfile"
 
 #+RESULTS:
 #+begin_example
-exp run start.date start.time iter.date iter.time epoch epoch.total iter iter.total
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:46.323 1 10 1 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:48.200 1 10 2 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:50.078 1 10 3 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:52.121 1 10 4 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:54.010 1 10 5 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:55.910 1 10 6 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:57.816 1 10 7 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:49:59.759 1 10 8 16
-IAAS-g4dn.xlarge 1 2022-08-02 10:47:41.206 2022-08-02 10:50:01.708 1 10 9 16
+exp batch.size run start.date start.time iter.date iter.time epoch epoch.total iter iter.total
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:39.198 1 10 1 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:41.943 1 10 2 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:44.553 1 10 3 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:47.166 1 10 4 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:49.845 1 10 5 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:52.464 1 10 6 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:55.089 1 10 7 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:11:57.702 1 10 8 16
+IAAS-g3s.xlarge 1 1 2022-08-02 18:08:29.288 2022-08-02 18:12:00.409 1 10 9 16
 #+end_example
 
 ** Epoch times
 
 #+begin_src shell :results output :exports both
 outfile="epochtimes.csv"
-echo exp run epoch epoch.duration > "$outfile"
+echo exp batch.size run epoch epoch.duration > "$outfile"
 for d in ../logs/*/;do
 	 exp="$(basename $d)"
 	 nexp=1
 	 for f in ${d}/*.log; do
 	     #echo "$exp","$nexp"
 	     #echo "$f"
-	     
-	     egrep "Epoch.*Complete" "$f" | cut -d " " -f 8- | sed -e "s/Epoch\[\(.*\)\] Complete. Time taken: \(.*\)/${exp} ${nexp} \1 \2/g"
+
+	     if grep -q 16/16 $f; then  bs=1; else bs=2; fi
+	     	     
+	     egrep "Epoch.*Complete" "$f" | cut -d " " -f 8- | sed -e "s/Epoch\[\(.*\)\] Complete. Time taken: \(.*\)/${exp} ${bs} ${nexp} \1 \2/g"
 	     
 	     nexp=$((nexp + 1))
 	 done
 done >> "$outfile"
 
-cat "$outfile"
-## head "$outfile"
+## cat "$outfile"
+head "$outfile"
 #+end_src
 
 #+RESULTS:
 #+begin_example
-exp run epoch epoch.duration
-IAAS-g4dn.xlarge 1 1 00:02:34
-IAAS-g4dn.xlarge 1 2 00:00:32
-IAAS-g4dn.xlarge 1 3 00:00:34
-IAAS-g4dn.xlarge 1 4 00:00:36
-IAAS-g4dn.xlarge 1 5 00:00:36
-IAAS-g4dn.xlarge 1 6 00:00:35
-IAAS-g4dn.xlarge 1 7 00:00:36
-IAAS-g4dn.xlarge 1 8 00:00:35
-IAAS-g4dn.xlarge 1 9 00:00:36
-IAAS-g4dn.xlarge 1 10 00:00:35
-IAAS-g4dn.xlarge 2 1 00:02:33
-IAAS-g4dn.xlarge 2 2 00:00:31
-IAAS-g4dn.xlarge 2 3 00:00:32
-IAAS-g4dn.xlarge 2 4 00:00:33
-IAAS-g4dn.xlarge 2 5 00:00:33
-IAAS-g4dn.xlarge 2 6 00:00:33
-IAAS-g4dn.xlarge 2 7 00:00:34
-IAAS-g4dn.xlarge 2 8 00:00:33
-IAAS-g4dn.xlarge 2 9 00:00:33
-IAAS-g4dn.xlarge 2 10 00:00:33
-IAAS-g4dn.xlarge 3 1 00:02:33
-IAAS-g4dn.xlarge 3 2 00:00:31
-IAAS-g4dn.xlarge 3 3 00:00:32
-IAAS-g4dn.xlarge 3 4 00:00:32
-IAAS-g4dn.xlarge 3 5 00:00:33
-IAAS-g4dn.xlarge 3 6 00:00:33
-IAAS-g4dn.xlarge 3 7 00:00:33
-IAAS-g4dn.xlarge 3 8 00:00:32
-IAAS-g4dn.xlarge 3 9 00:00:32
-IAAS-g4dn.xlarge 3 10 00:00:33
-IAAS-p2.xlarge 1 1 00:04:33
-IAAS-p2.xlarge 1 2 00:01:38
-IAAS-p2.xlarge 1 3 00:01:38
-IAAS-p2.xlarge 1 4 00:01:38
-IAAS-p2.xlarge 1 5 00:01:38
-IAAS-p2.xlarge 1 6 00:01:38
-IAAS-p2.xlarge 1 7 00:01:38
-IAAS-p2.xlarge 1 8 00:01:38
-IAAS-p2.xlarge 1 9 00:01:38
-IAAS-p2.xlarge 1 10 00:01:38
-IAAS-p2.xlarge 2 1 00:03:59
-IAAS-p2.xlarge 2 2 00:01:38
-IAAS-p2.xlarge 2 3 00:01:38
-IAAS-p2.xlarge 2 4 00:01:39
-IAAS-p2.xlarge 2 5 00:01:39
-IAAS-p2.xlarge 2 6 00:01:39
-IAAS-p2.xlarge 2 7 00:02:06
-IAAS-p2.xlarge 2 8 00:01:41
-IAAS-p2.xlarge 2 9 00:01:38
-IAAS-p2.xlarge 2 10 00:01:38
-IAAS-p2.xlarge 3 1 00:04:35
-IAAS-p2.xlarge 3 2 00:01:34
-IAAS-p2.xlarge 3 3 00:01:34
-IAAS-p2.xlarge 3 4 00:01:34
-IAAS-p2.xlarge 3 5 00:01:33
-IAAS-p2.xlarge 3 6 00:01:34
-IAAS-p2.xlarge 3 7 00:01:33
-IAAS-p2.xlarge 3 8 00:01:34
-IAAS-p2.xlarge 3 9 00:01:33
-IAAS-p2.xlarge 3 10 00:01:33
-IAAS-p3.2xlarge 1 1 00:03:04
-IAAS-p3.2xlarge 1 2 00:00:11
-IAAS-p3.2xlarge 1 3 00:00:11
-IAAS-p3.2xlarge 1 4 00:00:11
-IAAS-p3.2xlarge 1 5 00:00:11
-IAAS-p3.2xlarge 1 6 00:00:11
-IAAS-p3.2xlarge 1 7 00:00:11
-IAAS-p3.2xlarge 1 8 00:00:11
-IAAS-p3.2xlarge 1 9 00:00:11
-IAAS-p3.2xlarge 1 10 00:00:11
-IAAS-p3.2xlarge 2 1 00:02:26
-IAAS-p3.2xlarge 2 2 00:00:12
-IAAS-p3.2xlarge 2 3 00:00:11
-IAAS-p3.2xlarge 2 4 00:00:11
-IAAS-p3.2xlarge 2 5 00:00:11
-IAAS-p3.2xlarge 2 6 00:00:12
-IAAS-p3.2xlarge 2 7 00:00:11
-IAAS-p3.2xlarge 2 8 00:00:11
-IAAS-p3.2xlarge 2 9 00:00:11
-IAAS-p3.2xlarge 2 10 00:00:11
-IAAS-p3.2xlarge 3 1 00:02:26
-IAAS-p3.2xlarge 3 2 00:00:11
-IAAS-p3.2xlarge 3 3 00:00:11
-IAAS-p3.2xlarge 3 4 00:00:11
-IAAS-p3.2xlarge 3 5 00:00:11
-IAAS-p3.2xlarge 3 6 00:00:11
-IAAS-p3.2xlarge 3 7 00:00:11
-IAAS-p3.2xlarge 3 8 00:00:11
-IAAS-p3.2xlarge 3 9 00:00:11
-IAAS-p3.2xlarge 3 10 00:00:11
-SAGEMAKER-ml-g4dn-xlarge 1 1 00:00:32
-SAGEMAKER-ml-g4dn-xlarge 1 2 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 3 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 4 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 5 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 6 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 7 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 8 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 9 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 1 10 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 2 1 00:00:30
-SAGEMAKER-ml-g4dn-xlarge 2 2 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 2 3 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 2 4 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 2 5 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 2 6 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 2 7 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 2 8 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 2 9 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 2 10 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 3 1 00:00:31
-SAGEMAKER-ml-g4dn-xlarge 3 2 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 3 00:00:27
-SAGEMAKER-ml-g4dn-xlarge 3 4 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 5 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 6 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 7 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 8 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 9 00:00:26
-SAGEMAKER-ml-g4dn-xlarge 3 10 00:00:27
-SAGEMAKER-ml-p3-2xlarge 1 1 00:00:15
-SAGEMAKER-ml-p3-2xlarge 1 2 00:00:10
-SAGEMAKER-ml-p3-2xlarge 1 3 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 4 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 5 00:00:10
-SAGEMAKER-ml-p3-2xlarge 1 6 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 7 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 8 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 9 00:00:11
-SAGEMAKER-ml-p3-2xlarge 1 10 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 1 00:00:20
-SAGEMAKER-ml-p3-2xlarge 2 2 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 3 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 4 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 5 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 6 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 7 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 8 00:00:10
-SAGEMAKER-ml-p3-2xlarge 2 9 00:00:11
-SAGEMAKER-ml-p3-2xlarge 2 10 00:00:11
-SAGEMAKER-ml-p3-2xlarge 3 1 00:00:16
-SAGEMAKER-ml-p3-2xlarge 3 2 00:00:11
-SAGEMAKER-ml-p3-2xlarge 3 3 00:00:10
-SAGEMAKER-ml-p3-2xlarge 3 4 00:00:10
-SAGEMAKER-ml-p3-2xlarge 3 5 00:00:11
-SAGEMAKER-ml-p3-2xlarge 3 6 00:00:11
-SAGEMAKER-ml-p3-2xlarge 3 7 00:00:10
-SAGEMAKER-ml-p3-2xlarge 3 8 00:00:10
-SAGEMAKER-ml-p3-2xlarge 3 9 00:00:11
-SAGEMAKER-ml-p3-2xlarge 3 10 00:00:11
+exp batch.size run epoch epoch.duration
+IAAS-g3s.xlarge 1 1 1 00:03:50
+IAAS-g3s.xlarge 1 1 2 00:00:44
+IAAS-g3s.xlarge 1 1 3 00:00:44
+IAAS-g3s.xlarge 1 1 4 00:00:44
+IAAS-g3s.xlarge 1 1 5 00:00:44
+IAAS-g3s.xlarge 1 1 6 00:00:44
+IAAS-g3s.xlarge 1 1 7 00:00:44
+IAAS-g3s.xlarge 1 1 8 00:00:44
+IAAS-g3s.xlarge 1 1 9 00:00:45
 #+end_example
+
 
 ** Total training times
 
 #+begin_src shell :results output :exports both
 outfile="trainingtimes.csv"
-echo exp run duration > "$outfile"
-for d in ../logs/*/;do
+echo exp batch.size run duration > "$outfile"
+for d in ../logs/*/; do
 	 exp="$(basename $d)"
 	 nexp=1
 	 for f in ${d}/*.log; do
+
+	     if grep -q 16/16 $f; then  bs=1; else bs=2; fi
 	     
-	     egrep "Engine run complete.*" "$f" | cut -d " " -f 13 | sed -e "s/\(.*\)/${exp} ${nexp} \1/g"
+	     egrep "Engine run complete.*" "$f" | cut -d " " -f 13 | sed -e "s/\(.*\)/${exp} ${bs} ${nexp} \1/g"
 	     
 	     nexp=$((nexp + 1))
 	 done
@@ -256,22 +120,34 @@ cat "$outfile"
 
 #+RESULTS:
 #+begin_example
-exp run duration
-IAAS-g4dn.xlarge 1 00:07:49
-IAAS-g4dn.xlarge 2 00:07:28
-IAAS-g4dn.xlarge 3 00:07:24
-IAAS-p2.xlarge 1 00:19:14
-IAAS-p2.xlarge 2 00:19:14
-IAAS-p2.xlarge 3 00:18:37
-IAAS-p3.2xlarge 1 00:04:43
-IAAS-p3.2xlarge 2 00:04:09
-IAAS-p3.2xlarge 3 00:04:06
-SAGEMAKER-ml-g4dn-xlarge 1 00:04:25
-SAGEMAKER-ml-g4dn-xlarge 2 00:04:29
-SAGEMAKER-ml-g4dn-xlarge 3 00:04:27
-SAGEMAKER-ml-p3-2xlarge 1 00:01:50
-SAGEMAKER-ml-p3-2xlarge 2 00:01:55
-SAGEMAKER-ml-p3-2xlarge 3 00:01:51
+exp batch.size run duration
+IAAS-g3s.xlarge 1 1 00:10:29
+IAAS-g3s.xlarge 1 2 00:09:39
+IAAS-g3s.xlarge 1 3 00:09:34
+IAAS-g4dn.xlarge 1 1 00:07:49
+IAAS-g4dn.xlarge 1 2 00:07:28
+IAAS-g4dn.xlarge 1 3 00:07:24
+IAAS-g5.xlarge 1 1 00:03:27
+IAAS-g5.xlarge 1 2 00:03:29
+IAAS-g5.xlarge 1 3 00:03:29
+IAAS-p2.xlarge 1 1 00:19:14
+IAAS-p2.xlarge 1 2 00:19:14
+IAAS-p2.xlarge 1 3 00:18:37
+IAAS-p3.2xlarge 1 1 00:04:43
+IAAS-p3.2xlarge 1 2 00:04:09
+IAAS-p3.2xlarge 1 3 00:04:06
+SAGEMAKER-ml-g4dn-xlarge 2 1 00:04:25
+SAGEMAKER-ml-g4dn-xlarge 2 2 00:04:29
+SAGEMAKER-ml-g4dn-xlarge 2 3 00:04:27
+SAGEMAKER-ml-g4dn-xlarge 1 4 00:05:22
+SAGEMAKER-ml-g4dn-xlarge 1 5 00:05:27
+SAGEMAKER-ml-g4dn-xlarge 1 6 00:05:30
+SAGEMAKER-ml-p3-2xlarge 2 1 00:01:50
+SAGEMAKER-ml-p3-2xlarge 2 2 00:01:55
+SAGEMAKER-ml-p3-2xlarge 2 3 00:01:51
+SAGEMAKER-ml-p3-2xlarge 1 4 00:01:59
+SAGEMAKER-ml-p3-2xlarge 1 5 00:01:57
+SAGEMAKER-ml-p3-2xlarge 1 6 00:01:56
 #+end_example
 
 
@@ -324,15 +200,50 @@ iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
 epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
 train.dt  <- read.timings.csv("plots/trainingtimes.csv")
 
-# glimpse(iter.dt)
-# glimpse(epoch.dt)
-# glimpse(train.dt)
+cat("Iterations:\n")
+head(iter.dt)
+cat("\nEpochs:\n")
+head(epoch.dt)
+cat("\nTraining:\n")
+head(train.dt)
 #+end_src
 
 #+RESULTS: read-csv-data
+#+begin_example
+Iterations:
+              exp batch.size run start.date   start.time  iter.date
+1 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+2 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+3 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+4 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+5 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+6 IAAS-g3s.xlarge          1   1 2022-08-02 18:08:29.288 2022-08-02
+     iter.time epoch epoch.total iter iter.total
+1 18:11:39.198     1          10    1         16
+2 18:11:41.943     1          10    2         16
+3 18:11:44.553     1          10    3         16
+4 18:11:47.166     1          10    4         16
+5 18:11:49.845     1          10    5         16
+6 18:11:52.464     1          10    6         16
 
-#+RESULTS:
+Epochs:
+              exp batch.size run epoch epoch.duration
+1 IAAS-g3s.xlarge          1   1     1       00:03:50
+2 IAAS-g3s.xlarge          1   1     2       00:00:44
+3 IAAS-g3s.xlarge          1   1     3       00:00:44
+4 IAAS-g3s.xlarge          1   1     4       00:00:44
+5 IAAS-g3s.xlarge          1   1     5       00:00:44
+6 IAAS-g3s.xlarge          1   1     6       00:00:44
 
+Training:
+               exp batch.size run duration
+1  IAAS-g3s.xlarge          1   1 00:10:29
+2  IAAS-g3s.xlarge          1   2 00:09:39
+3  IAAS-g3s.xlarge          1   3 00:09:34
+4 IAAS-g4dn.xlarge          1   1 00:07:49
+5 IAAS-g4dn.xlarge          1   2 00:07:28
+6 IAAS-g4dn.xlarge          1   3 00:07:24
+#+end_example
 
 * Helper functions
 
