@@ -852,61 +852,45 @@ train.dt %>%
 #+name: read-billing-data
 #+begin_src R :results output :exports both :noweb no-export
 <<do-init>>
-  
+
 temp.dt <- read.table("logs/summary.csv", sep = ",", header = TRUE,
                          stringsAsFactors = TRUE)
 
 temp.dt %>%
-  rename(price=pricing,
-         batch.sz=batch.size,
-         boot.t=boot.time.in.seconds,
-         train.t=training.time.in.seconds,
-         total.t=total.time.in.seconds) %>%
-  mutate(cost = total.t / 60 * price
+  rename(price = pricing,
+         boot.t = boot.time.in.seconds,
+         train.t = training.time.in.seconds,
+         total.t = total.time.in.seconds) %>%
+  group_by(instance, type, batch.size) %>%
+  mutate(run = row_number()) %>% ungroup() %>%
+mutate(cost = total.t / 60 * price          
          ) -> bill.dt
 bill.dt
 #+end_src
 
 #+RESULTS: read-billing-data
 #+begin_example
-         instance      type    region price batch.sz run boot.t train.t total.t
-1     g4dn.xlarge      IaaS us-east-1 0.526        1   1    474     469     943
-2     g4dn.xlarge      IaaS us-east-1 0.526        1   2    474     448     922
-3     g4dn.xlarge      IaaS us-east-1 0.526        1   3    474     444     918
-4      p3.2xlarge      IaaS us-east-1 3.060        1   1    449     283     732
-5      p3.2xlarge      IaaS us-east-1 3.060        1   2    449     249     698
-6      p3.2xlarge      IaaS us-east-1 3.060        1   3    449     246     695
-7       p2.xlarge      IaaS us-east-1 0.900        1   1    608    1117    1725
-8       p2.xlarge      IaaS us-east-1 0.900        1   2    398    1154    1552
-9       p2.xlarge      IaaS us-east-1 0.900        1   3    436    1117    1553
-10 ml.g4dn.xlarge SageMaker us-east-1 0.736        2   1    248     265     513
-11 ml.g4dn.xlarge SageMaker us-east-1 0.736        2   2    250     269     519
-12 ml.g4dn.xlarge SageMaker us-east-1 0.736        2   3    248     267     515
-13  ml.p3.2xlarge SageMaker us-east-1 3.825        2   1    228     110     338
-14  ml.p3.2xlarge SageMaker us-east-1 3.825        2   2    238     115     353
-15  ml.p3.2xlarge SageMaker us-east-1 3.825        2   3    285     111     396
-        cost
-1   8.266967
-2   8.082867
-3   8.047800
-4  37.332000
-5  35.598000
-6  35.445000
-7  25.875000
-8  23.280000
-9  23.295000
-10  6.292800
-11  6.366400
-12  6.317333
-13 21.547500
-14 22.503750
-15 25.245000
+# A tibble: 21 × 10
+   instance       type   region price batch…¹ boot.t train.t total.t   run  cost
+   <fct>          <fct>  <fct>  <dbl>   <int>  <int>   <int>   <int> <int> <dbl>
+ 1 g4dn.xlarge    IaaS   us-ea… 0.526       1    474     469     943     1  8.27
+ 2 g4dn.xlarge    IaaS   us-ea… 0.526       1    474     448     922     2  8.08
+ 3 g4dn.xlarge    IaaS   us-ea… 0.526       1    474     444     918     3  8.05
+ 4 p3.2xlarge     IaaS   us-ea… 3.06        1    449     283     732     1 37.3 
+ 5 p3.2xlarge     IaaS   us-ea… 3.06        1    449     249     698     2 35.6 
+ 6 p3.2xlarge     IaaS   us-ea… 3.06        1    449     246     695     3 35.4 
+ 7 p2.xlarge      IaaS   us-ea… 0.9         1    608    1117    1725     1 25.9 
+ 8 p2.xlarge      IaaS   us-ea… 0.9         1    398    1154    1552     2 23.3 
+ 9 p2.xlarge      IaaS   us-ea… 0.9         1    436    1117    1553     3 23.3 
+10 ml.g4dn.xlarge SageM… us-ea… 0.736       2    248     265     513     1  6.29
+# … with 11 more rows, and abbreviated variable name ¹​batch.size
+# ℹ Use `print(n = ...)` to see more rows
 #+end_example
 
 
-*** Plotting the billed times
+*** Plotting the billed times for both BS=1 and BS=2
 
-#+begin_src R :results output graphics file :file billed-times.png :exports both :width 450 :height 300 :noweb no-export
+#+begin_src R :results output graphics file :file billed-times.png :exports both :width 600 :height 300 :noweb no-export
 
 <<read-billing-data>>
 
@@ -914,12 +898,12 @@ plot.bill.times <- function(dt)
 {
   dt %>%
     mutate(run = factor(run),
-           type.inst = paste(type, instance, sep="\n")) %>%
+           type.inst = paste0(type, "\nbatch size = ", batch.size, "\n", instance)) %>%
     ggplot(aes(x = type.inst)) +
     geom_col(aes(y = total.t, fill = run, group = run),
-             position=position_dodge()) +
-    geom_col(aes(y = train.t, fill = run, group = run), color = "white",
-             size = 1, position = position_dodge2(padding = 0.25)) + 
+             position = position_dodge2(padding = 0.3)) +
+    geom_col(aes(y = train.t, fill = run, group = run),
+             position = position_dodge()) + 
     scale_fill_discrete(name = "Run") +
     scale_x_discrete(name = "Instance type") +
     scale_y_continuous(name = "Training time and Billable time (s)") +
@@ -934,11 +918,39 @@ bill.dt %>%
 #+RESULTS:
 [[file:./img/billed-times.png]]
 
-*** Training time relative to the total billed time
+*** Training time relative to the total billed time  for both BS=1 and BS=2
 
-*** Plotting the total costs
+#+begin_src R :results output graphics file :file training-rel-billed-times.png :exports both :width 600 :height 300 :noweb no-export
 
-#+begin_src R :results output graphics file :file total-costs.png :exports both :width 450 :height 300 :noweb no-export
+<<read-billing-data>>
+
+plot.rel.train.times <- function(dt)
+{
+  dt %>%
+    mutate(run = factor(run),
+           rel.train.t = train.t / total.t, 
+           type.inst = paste0(type, "\nbatch size = ", batch.size, "\n", instance)) %>%
+    ggplot(aes(x = type.inst)) +
+    geom_col(aes(y = rel.train.t, fill = run, group = run),
+             position = position_dodge()) +
+        scale_fill_discrete(name = "Run") +
+    scale_x_discrete(name = "Instance type") +
+    scale_y_continuous(name = "Proportion of the billable time spent on training") +
+    theme_bw()
+}
+
+bill.dt %>%
+  plot.rel.train.times()
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/training-rel-billed-times.png]]
+
+
+*** Plotting the total costs for both BS=1 and BS=2
+
+#+begin_src R :results output graphics file :file total-costs.png :exports both :width 600 :height 300 :noweb no-export
 
 <<read-billing-data>>
 
@@ -946,7 +958,7 @@ plot.costs <- function(dt)
 {
   dt %>%
     mutate(run = factor(run),
-           type.inst = paste(type, instance, sep="\n")) %>%
+           type.inst = paste0(type, "\nbatch size = ", batch.size, "\n", instance)) %>%
     ggplot(aes(x = type.inst, y = cost, fill = run)) +
     geom_col(position = position_dodge()) +
     scale_fill_discrete(name = "Run") +
