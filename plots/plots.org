@@ -519,11 +519,10 @@ exps <- c("SAGEMAKER-ml-p3-2xlarge")
 
 iter.dt %>%
   filter(batch.size == 1) %>%
-  #filter(!(epoch == 1 & iter == 1) 1) %>%
   filter(run == 1 & exp %in% exps) %>%
   mutate(epoch = factor(epoch)) %>%
   plot.iter.times.v3(scl = "free") +
-  theme_bw()
+  theme_bw() -> p1
 
 iter.dt %>%
   filter(batch.size == 1) %>%
@@ -537,7 +536,7 @@ iter.dt %>%
     ) -> p2
 
 p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
-                       ymin = 10, ymax = 125)
+                       ymin = 1.5, ymax = 8.5)
 
 #+end_src
 
