@@ -544,6 +544,173 @@ p1 + annotation_custom(ggplotGrob(p2), xmin=3, xmax=16,
 [[file:./img/iteration-times-single-sm-mlp3.2xlarge.png]]
 
 
+*** Plots for BS=2
+
+#+begin_src R :results output graphics file :file iteration-times-bs2.png :exports both :width 600 :height 400 :noweb no-export
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.iter.times <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    facet_grid(cols = vars(run), rows = vars(exp), scales=scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times() +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-bs2.png]]
+
+
+Plot without the first iteration of the first epoch:
+
+#+begin_src R :results output graphics file :file iteration-times-no-1st-iter-bs2.png :exports both :width 600 :height 400 :noweb no-export
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times() +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-no-1st-iter-bs2.png]]
+
+
+Plot with free /y/ scale:
+
+#+begin_src R :results output graphics file :file iteration-times-no-1st-iter-freescale-bs2.png :exports both :width 600 :height 400 :noweb no-export
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times(scl = "free_y") +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-no-1st-iter-freescale-bs2.png]]
+
+
+Plotting only a few executions:
+#+begin_src R :results output graphics file :file iteration-times-few-runs.png  :exports both :width 600 :height 400 :noweb no-export
+plot.iter.times.v2 <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    facet_grid(cols = vars(exp), scales=scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v2(scl = "free") +
+  theme_bw() 
+  
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-few-runs.png]]
+
+Plotting only a few executions:
+#+begin_src R :results output graphics file :file iteration-times-single-sagemakermlg4dnxlarge-bs2.png  :exports both :width 600 :height 400 :noweb no-export
+plot.iter.times.v3 <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    ## facet_grid(cols = vars(exp), scales=scl,
+    ##            labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Iteration number") +
+    scale_y_continuous(name = "Iteration time (s)") +
+    scale_color_discrete(name = "Epoch")
+}
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("SAGEMAKER-ml-g4dn-xlarge")
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() -> p1
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+    ) -> p2
+
+ p1 + annotation_custom(ggplotGrob(p2), xmin=2.5, xmax=8,
+                       ymin = 4, ymax = 9.5)
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-single-sagemakermlg4dnxlarge-bs2.png]]
+
+#+begin_src R :results output graphics file :file iteration-times-single-sagemager-mlp3.2xlarge-bs2.png  :exports both :width 600 :height 400 :noweb no-export
+
+# exps <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+exps <- c("SAGEMAKER-ml-p3-2xlarge")
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  #filter(!(epoch == 1 & iter == 1) 1) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() -> p1
+
+iter.dt %>%
+  filter(batch.size == 2) %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  filter(run == 1 & exp %in% exps) %>%
+  mutate(epoch = factor(epoch)) %>%
+  plot.iter.times.v3(scl = "free") +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+    ) -> p2
+
+p1 + annotation_custom(ggplotGrob(p2), xmin=2.5, xmax=8,
+                       ymin = 1.5, ymax = 6)
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/iteration-times-single-sagemager-mlp3.2xlarge-bs2.png]]
+
+
+
 ** Epoch times
 
 *** Reading the data
@@ -725,6 +892,156 @@ epoch.dt %>%
 #+RESULTS:
 [[file:./img/epoch-times-columns-no-first-epoch.png]]
 
+
+*** Plots for BS=2
+
+#+begin_src R :results output graphics file :file epoch-times-bs2.png :exports both :width 600 :height 400 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.epoch.times <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = epoch, y = epoch.sec, group = run, color=run)) +
+    geom_line() +
+    ## facet_grid(cols = vars(exp), scales = scl,
+    ##            labeller = labeller(exp = lbl.exp)) +
+    facet_grid(rows = vars(exp), scales = scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Epoch number", breaks = seq(0,10,1)) +
+    scale_y_continuous(name = "Epoch time (s)", limits = c(0,NA)) +
+    scale_color_discrete(name = "Run")
+}
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times(scl = "fixed") +
+  theme_bw()
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-bs2.png]]
+
+#+begin_src R :results output graphics file :file epoch-times-free-scale-bs2.png :exports both :width 600 :height 400 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times(scl = "free") +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-free-scale-bs2.png]]
+
+#+begin_src R :results output graphics file :file epoch-times-no-first-epoch-bs2.png :exports both :width 600 :height 400 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  filter(epoch != 1) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times(scl = "fixed") +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-no-first-epoch-bs2.png]]
+
+#+begin_src R :results output graphics file :file epoch-times-no-first-epoch-free-scale-bs2.png :exports both :width 600 :height 400 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  filter(epoch != 1) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times(scl = "free") +
+  theme_bw()
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-no-first-epoch-free-scale-bs2.png]]
+
+**** With horizontal facets (one plot per column)
+
+All epochs:
+
+#+begin_src R :results output graphics file :file epoch-times-columns-bs2.png :exports both :width 450 :height 300 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.epoch.times.cols <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = epoch, y = epoch.sec, group = run, color=run)) +
+    geom_line() +
+    facet_grid(cols = vars(exp), scales = scl,
+                labeller = labeller(exp = lbl.exp)) +
+    ## facet_grid(rows = vars(exp), scales = scl,
+    ##            labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Epoch number", breaks = seq(0,10,1)) +
+    scale_y_continuous(name = "Epoch time (s)", limits = c(0,NA)) +
+    scale_color_discrete(name = "Run")
+}
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times.cols(scl = "fixed") +
+  theme_bw() +
+  theme(legend.position = "top")
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-columns-bs2.png]]
+
+
+
+Without the first epoch:
+
+#+begin_src R :results output graphics file :file epoch-times-columns-no-first-epoch-bs2.png :exports both :width 450 :height 300 :noweb no-export
+
+<<read-epoch-times>>
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+epoch.dt %>%
+  filter(batch.size == 2) %>%
+  filter(epoch != 1) %>%
+  mutate(run = factor(run)) %>%
+  plot.epoch.times.cols(scl = "fixed") +
+  theme_bw() +
+  theme(legend.position = "top")
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-columns-no-first-epoch-bs2.png]]
+
 ** Total training times
 *** Reading the data
 
@@ -843,6 +1160,80 @@ train.dt %>%
 
 #+RESULTS:
 [[file:./img/epoch-times-bars.png]]
+
+*** Plots for BS=2
+
+#+name: plot-train-func
+#+begin_src R :results output :exports both :noweb no-export
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+lbl.exp.1l <- c("IaaS g4dn.xlarge", "IaaS p2.xlarge", "IaaS p3.2xlarge", "SageMaker ml.g4dn.xlarge", "SageMaker ml.p3.2xlarge")
+names(lbl.exp.1l) <- c("IAAS-g4dn.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+plot.train.times <- function(dt, scl = "fixed")
+{
+  dt %>%
+    ggplot(aes(x = run, y = train.sec, color = exp)) +
+    geom_line() +
+    scale_x_continuous(name = "Executions", breaks = seq(0,10,1)) +
+    scale_y_continuous(name = "Training time (s)", limits = c(0,NA)) +
+    scale_color_discrete(name = "Environment", labels = lbl.exp.1l)  +
+    guides(color = guide_legend(nrow=3), byrow=FALSE) +
+    theme_bw() +
+    theme(legend.position = "top")
+}
+
+plot.train.times.col <- function(dt, scl = "fixed")
+{
+  dt %>%
+    mutate(run = factor(run)) %>%
+    ggplot(aes(x = exp, y = train.sec, fill = run)) +
+    geom_col(position = position_dodge()) +
+    scale_x_discrete(name = "Environment", labels = lbl.exp) +
+    scale_y_continuous(name = "Training time (s)", limits = c(0,NA)) +
+    scale_fill_discrete(name = "Executions") +
+    theme_bw()
+}
+
+#+end_src
+
+#+RESULTS: plot-train-func
+
+
+#+begin_src R :results output graphics file :file training-times-bs2.png :exports both :width  450 :height 300 :noweb no-export
+
+<<read-training-times>>
+
+<<plot-train-func>>
+
+train.dt %>%
+  filter(batch.size == 2) %>%
+  ## mutate(run = factor(run)) %>%
+  plot.train.times(scl = "fixed") 
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/training-times-bs2.png]]
+
+
+#+begin_src R :results output graphics file :file epoch-times-bars-bs2.png :exports both :width 450 :height 300 :noweb no-export
+
+<<read-training-times>>
+
+<<plot-train-func>>
+
+train.dt %>%
+  filter(batch.size == 2) %>%
+  ## mutate(run = factor(run)) %>%
+  plot.train.times.col(scl = "fixed") +
+  theme(legend.position = c(0.9,0.8))
+
+#+end_src
+
+#+RESULTS:
+[[file:./img/epoch-times-bars-bs2.png]]
 
 ** Billed time and costs
 
