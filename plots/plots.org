@@ -605,7 +605,7 @@ iter.dt %>%
 
 
 Plotting only a few executions:
-#+begin_src R :results output graphics file :file iteration-times-few-runs.png  :exports both :width 600 :height 400 :noweb no-export
+#+begin_src R :results output graphics file :file iteration-times-few-runs-bs2.png  :exports both :width 600 :height 400 :noweb no-export
 plot.iter.times.v2 <- function(dt, scl = "fixed")
 {
   dt %>%
@@ -632,7 +632,7 @@ iter.dt %>%
 #+end_src
 
 #+RESULTS:
-[[file:./img/iteration-times-few-runs.png]]
+[[file:./img/iteration-times-few-runs-bs2.png]]
 
 Plotting only a few executions:
 #+begin_src R :results output graphics file :file iteration-times-single-sagemakermlg4dnxlarge-bs2.png  :exports both :width 600 :height 400 :noweb no-export
