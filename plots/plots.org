@@ -26,7 +26,10 @@ outfile="itertimes.csv"
 echo exp  batch.size run start.date start.time iter.date iter.time epoch epoch.total iter iter.total > "$outfile"
 for d in ../logs/*/;do
 	 exp="$(basename $d)"
-	 nexp=1
+
+	 nexpbs1=0
+	 nexpbs2=0
+	 
 	 for f in ${d}/*.log; do
 	     #echo "$exp","$nexp"
 	     #echo "$f"
@@ -34,10 +37,18 @@ for d in ../logs/*/;do
 	     # All experiments finihed in the same day they started.
 	     # So, we can ignore their dates when computing the timings
 
-	     if grep -q 16/16 $f; then bs=1; else bs=2; fi
+	     if grep -q 16/16 $f; then
+		 bs=1;
+		 nexpbs1=$((nexpbs1 + 1))
+		 nexp=$nexpbs1
+	     else
+		 bs=2;
+		 nexpbs2=$((nexpbs2 + 1))
+		 nexp=$nexpbs2
+	     fi
 	     
 	     egrep "Epoch.*Iter:" "$f" | sed -e "s/\(.*\) - ignite.engine.engine.DynUNetTrainer - INFO - Epoch: \([^\/]*\)\/\([^,]*\), Iter: \([^\/]*\)\/\([^ ]*\) .*/${exp} ${bs} ${nexp} ${start} \1 \2 \3 \4 \5/g" -e "s/,/\./g"
-	     nexp=$((nexp + 1))
+	     
 	 done
 done >> "$outfile"
 
@@ -66,16 +77,26 @@ outfile="epochtimes.csv"
 echo exp batch.size run epoch epoch.duration > "$outfile"
 for d in ../logs/*/;do
 	 exp="$(basename $d)"
-	 nexp=1
+
+	 nexpbs1=0
+	 nexpbs2=0
+
 	 for f in ${d}/*.log; do
 	     #echo "$exp","$nexp"
 	     #echo "$f"
 
-	     if grep -q 16/16 $f; then  bs=1; else bs=2; fi
-	     	     
+	     if grep -q 16/16 $f; then
+		 bs=1;
+		 nexpbs1=$((nexpbs1 + 1))
+		 nexp=$nexpbs1
+	     else
+		 bs=2;
+		 nexpbs2=$((nexpbs2 + 1))
+		 nexp=$nexpbs2
+	     fi
+	     
 	     egrep "Epoch.*Complete" "$f" | cut -d " " -f 8- | sed -e "s/Epoch\[\(.*\)\] Complete. Time taken: \(.*\)/${exp} ${bs} ${nexp} \1 \2/g"
 	     
-	     nexp=$((nexp + 1))
 	 done
 done >> "$outfile"
 
@@ -105,14 +126,25 @@ outfile="trainingtimes.csv"
 echo exp batch.size run duration > "$outfile"
 for d in ../logs/*/; do
 	 exp="$(basename $d)"
-	 nexp=1
+
+	 nexpbs1=0
+	 nexpbs2=0
+
 	 for f in ${d}/*.log; do
 
-	     if grep -q 16/16 $f; then  bs=1; else bs=2; fi
+
+	     if grep -q 16/16 $f; then
+		 bs=1;
+		 nexpbs1=$((nexpbs1 + 1))
+		 nexp=$nexpbs1
+	     else
+		 bs=2;
+		 nexpbs2=$((nexpbs2 + 1))
+		 nexp=$nexpbs2
+	     fi
 	     
 	     egrep "Engine run complete.*" "$f" | cut -d " " -f 13 | sed -e "s/\(.*\)/${exp} ${bs} ${nexp} \1/g"
 	     
-	     nexp=$((nexp + 1))
 	 done
 done >> "$outfile"
 cat "$outfile"
@@ -139,15 +171,15 @@ IAAS-p3.2xlarge 1 3 00:04:06
 SAGEMAKER-ml-g4dn-xlarge 2 1 00:04:25
 SAGEMAKER-ml-g4dn-xlarge 2 2 00:04:29
 SAGEMAKER-ml-g4dn-xlarge 2 3 00:04:27
-SAGEMAKER-ml-g4dn-xlarge 1 4 00:05:22
-SAGEMAKER-ml-g4dn-xlarge 1 5 00:05:27
-SAGEMAKER-ml-g4dn-xlarge 1 6 00:05:30
+SAGEMAKER-ml-g4dn-xlarge 1 1 00:05:22
+SAGEMAKER-ml-g4dn-xlarge 1 2 00:05:27
+SAGEMAKER-ml-g4dn-xlarge 1 3 00:05:30
 SAGEMAKER-ml-p3-2xlarge 2 1 00:01:50
 SAGEMAKER-ml-p3-2xlarge 2 2 00:01:55
 SAGEMAKER-ml-p3-2xlarge 2 3 00:01:51
-SAGEMAKER-ml-p3-2xlarge 1 4 00:01:59
-SAGEMAKER-ml-p3-2xlarge 1 5 00:01:57
-SAGEMAKER-ml-p3-2xlarge 1 6 00:01:56
+SAGEMAKER-ml-p3-2xlarge 1 1 00:01:59
+SAGEMAKER-ml-p3-2xlarge 1 2 00:01:57
+SAGEMAKER-ml-p3-2xlarge 1 3 00:01:56
 #+end_example
 
 
@@ -200,12 +232,12 @@ iter.dt   <- read.timings.csv("plots/itertimes.csv"    )
 epoch.dt  <- read.timings.csv("plots/epochtimes.csv"   )
 train.dt  <- read.timings.csv("plots/trainingtimes.csv")
 
-cat("Iterations:\n")
-head(iter.dt)
-cat("\nEpochs:\n")
-head(epoch.dt)
-cat("\nTraining:\n")
-head(train.dt)
+## cat("Iterations:\n")
+## head(iter.dt)
+## cat("\nEpochs:\n")
+## head(epoch.dt)
+## cat("\nTraining:\n")
+## head(train.dt)
 #+end_src
 
 #+RESULTS: read-csv-data
