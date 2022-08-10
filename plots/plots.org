@@ -1707,9 +1707,15 @@ plot.costs <- function(dt)
     scale_x_discrete(name = "Configuration") +
     scale_y_continuous(name = "Costs (USD)") +
     theme_bw() +
-    theme(text = element_text(size = 14, family = "serif"))
+    theme(text = element_text(size = 10, family = "serif"),
+          plot.margin = margin(1, 1, 1, 1, "pt"),
+          legend.position = c(0.85, 0.85),
+          legend.text = element_text(size = 14)
+          )
 }
 
+## As the error bars can't be stacked, I'll have to adjust the training
+## cost to account for the stacking:
 costs$min[costs$metric == "Training cost"] <-
   costs$min[costs$metric == "Training cost"] +
   costs$med[costs$metric == "Boot cost"]
@@ -1724,6 +1730,7 @@ costs$medsum[costs$metric == "Training cost"] <-
 costs$medsum[costs$metric == "Boot cost"] <-
   costs$med[costs$metric == "Boot cost"]
 
+## Now we call the plot function.
 costs %>%
   filter(metric %in% c("Boot cost", "Training cost")) %>%
   plot.costs()
