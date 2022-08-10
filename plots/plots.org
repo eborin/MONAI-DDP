@@ -711,6 +711,225 @@ p1 + annotation_custom(ggplotGrob(p2), xmin=2.5, xmax=8,
 
 
 
+*** Plots for BS1 with all instances
+
+#+name: calc-iter-timings-all
+#+begin_src R :results output :exports both :noweb no-export
+<<fun-conv-timings>>
+<<read-csv-data>>
+
+exp.list <- c("IAAS-g4dn.xlarge", "IAAS-g3s.xlarge", "IAAS-g5.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+lbl.exp <- c("IaaS\ng4dn.xlarge", "IaaS\ng3s.xlarge", "IaaS\ng5.xlarge", "IaaS\np2.xlarge", "IaaS\np3.2xlarge", "SageMaker\nml.g4dn.xlarge", "SageMaker\nml.p3.2xlarge")
+names(lbl.exp) <- c("IAAS-g4dn.xlarge", "IAAS-g3s.xlarge", "IAAS-g5.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+lbl.exp.1l <- c("IaaS g4dn.xlarge", "IaaS g3s.xlarge", "IaaS g5.xlarge", "IaaS p2.xlarge", "IaaS p3.2xlarge", "SageMaker ml.g4dn.xlarge", "SageMaker ml.p3.2xlarge")
+names(lbl.exp.1l) <- c("IAAS-g4dn.xlarge", "IAAS-g3s.xlarge", "IAAS-g5.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+lbl.exp.1l.short <- c("g4dn.xlarge", "g3s.xlarge", "g5.xlarge", "p2.xlarge", "p3.2xlarge", "ml.g4dn.xlarge", "ml.p3.2xlarge")
+names(lbl.exp.1l.short) <- c("IAAS-g4dn.xlarge", "IAAS-g3s.xlarge", "IAAS-g5.xlarge", "IAAS-p2.xlarge", "IAAS-p3.2xlarge", "SAGEMAKER-ml-g4dn-xlarge", "SAGEMAKER-ml-p3-2xlarge")
+
+
+iter.dt %>%
+  data.frame %>%
+  filter((exp %in% exp.list) & (batch.size == 1)) %>%
+    mutate(start.sec = unlist(lapply(as.character(start.time), my.tsec)),
+         iter.sec = unlist(lapply(as.character(iter.time), my.tsec)),
+         iter.elapsed = iter.sec - start.sec) %>%
+  group_by(exp, batch.size, run) %>%
+  mutate(iter.dur = iter.elapsed - lag(iter.elapsed, default = 0)) %>%
+  ungroup() %>% data.table -> iter.dt
+  summary(iter.dt)
+#+end_src
+
+#+RESULTS: calc-iter-timings-all
+#+begin_example
+                       exp        batch.size      run         start.date  
+ IAAS-g3s.xlarge         :480   Min.   :1    Min.   :1   2022-07-26:   0  
+ IAAS-g4dn.xlarge        :480   1st Qu.:1    1st Qu.:1   2022-07-27:   0  
+ IAAS-g5.xlarge          :480   Median :1    Median :2   2022-07-28:   0  
+ IAAS-p2.xlarge          :480   Mean   :1    Mean   :2   2022-08-02:3360  
+ IAAS-p3.2xlarge         :480   3rd Qu.:1    3rd Qu.:3                    
+ SAGEMAKER-ml-g4dn-xlarge:480   Max.   :1    Max.   :3                    
+ SAGEMAKER-ml-p3-2xlarge :480                                             
+        start.time        iter.date           iter.time        epoch     
+ 10:47:41.187: 160   2022-07-26:   0   12:43:14.584:   2   Min.   : 1.0  
+ 10:47:41.204: 160   2022-07-27:   0   18:36:31.149:   2   1st Qu.: 3.0  
+ 10:47:41.206: 160   2022-07-28:   0   18:36:31.951:   2   Median : 5.5  
+ 11:25:52.599: 160   2022-08-02:3360   18:36:56.912:   2   Mean   : 5.5  
+ 11:30:12.898: 160                     18:37:39.705:   2   3rd Qu.: 8.0  
+ 12:01:57.830: 160                     10:49:46.269:   1   Max.   :10.0  
+ (Other)     :2400                     (Other)     :3349                 
+  epoch.total      iter         iter.total   start.sec        iter.sec    
+ Min.   :10   Min.   : 1.00   Min.   :16   Min.   :38861   Min.   :38986  
+ 1st Qu.:10   1st Qu.: 4.75   1st Qu.:16   1st Qu.:43318   1st Qu.:43738  
+ Median :10   Median : 8.50   Median :16   Median :65580   Median :65864  
+ Mean   :10   Mean   : 8.50   Mean   :16   Mean   :57476   Mean   :57750  
+ 3rd Qu.:10   3rd Qu.:12.25   3rd Qu.:16   3rd Qu.:69212   3rd Qu.:69455  
+ Max.   :10   Max.   :16.00   Max.   :16   Max.   :73955   Max.   :74071  
+                                                                          
+  iter.elapsed         iter.dur      
+ Min.   :   5.995   Min.   :  0.388  
+ 1st Qu.: 144.168   1st Qu.:  0.668  
+ Median : 205.117   Median :  1.963  
+ Mean   : 273.867   Mean   :  2.769  
+ 3rd Qu.: 338.182   3rd Qu.:  2.671  
+ Max.   :1154.465   Max.   :189.910
+#+end_example
+
+#+name: plot-iter-time-all
+#+begin_src R :results output graphics file :file iteration-times-all-instances.png :exports both :width 600 :height 800 :noweb no-export
+
+plot.iter.times <- function(dt, scl="fixed")
+{
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    facet_grid(cols = vars(run), rows = vars(exp), scales=scl,
+               labeller = labeller(exp = lbl.exp)) +
+    scale_x_continuous(name = "Step number", limits = c(1, NA)) +
+    scale_y_continuous(name = "Step time (s)",
+                       ## limits = c(0, 10), # this also removes the data points that are outside the limit
+                       breaks = seq(2, 10, 2)) +
+    ## ylim(0, 10) + # same as setting the limits in scale_y_continuous()
+    coord_cartesian(ylim = c(0, 10)) + # this limits the axis but stil includes datapoints inside the limit
+    scale_color_discrete(name = "Epoch") +
+    theme_bw() +
+    theme(
+      text = element_text(size = 14, family = "serif")
+    )
+}
+
+iter.dt %>%
+  filter(batch.size == 1) %>%
+  ## filter(epoch == 1) %>%
+  ## filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  ## plot.iter.times(scl = "fixed") +
+  plot.iter.times(scl = "fixed") 
+#+end_src
+
+#+RESULTS: plot-iter-time-all
+[[file:./img/iteration-times-all-instances.png]]
+
+PDF version:
+#+name: plot-iter-time-all-pdf
+#+begin_src R :results output graphics file :file iteration-times-all-instances.pdf :exports both :width 6 :height 8 :noweb no-export
+
+<<plot-iter-time-all>>
+
+#+end_src
+
+#+RESULTS: plot-iter-time-all-pdf
+[[file:./img/iteration-times-all-instances.pdf]]
+
+
+Using ~coord_cartesian()~ to set the /y/ axis limits disables the free scales in the facets, and  I could not find a way to set different ~coord_cartesian()~ limits for each facet. So, instead of using facets, I will create multiple plots and assemble them using the ~patchwork~ library.
+
+#+name: plot-iter-time-all-v2
+#+begin_src R :results output graphics file :file iteration-times-all-instances-v2.png :exports both :width 600 :height 800 :noweb no-export
+
+library(patchwork)
+
+calc.ymax <- function(dt, e)
+{
+  dt%>%
+    filter(exp == e) %>%
+    filter(!(epoch == 1 & iter == 1)) %>%
+    data.frame() -> dt.tmp
+  ceiling(max(dt.tmp$iter.dur))
+  ## max(dt.tmp$iter.dur)
+}
+
+plot.single.run <- function(dt, e, r, ymax)
+{
+  if(ymax < 2)
+    brkspc = 0.5
+  else if(ymax < 5)
+    brkspc = 1
+  else
+    brkspc = 2
+    
+  dt %>%
+    ggplot(aes(x = iter, y = iter.dur, group = epoch, color=epoch)) +
+    geom_line() +
+    scale_x_continuous(name = "Step number",
+                       limits = c(1, NA)) +
+    scale_y_continuous(name = "Step time (s)",
+                       ## limits = c(0, 10), # this also removes the data points that are outside the limit
+                       breaks = seq(0, 10, brkspc)) +
+    ## ylim(0, 10) + # same as setting the limits in scale_y_continuous()
+    coord_cartesian(ylim = c(0, ymax)) + # this limits the axis but stil includes datapoints inside the limit
+    scale_color_discrete(name = "Epoch") +
+    ggtitle(paste0(e,", Run #", r)) +
+    theme_bw() +
+    theme(text = element_text(size = 14, family = "serif"),
+          title = element_text(size = 12),
+          axis.title = element_blank(),
+          legend.title = element_text(size = 10),
+          plot.margin = margin(1, 1, 1, 1, "pt")
+          )
+}
+
+plot.iter.times.v2 <- function(dt)
+{
+  p = list()
+  n = 1
+  for(e in unique(iter.dt$exp)){
+    ymax = calc.ymax(dt, e)
+    for(r in unique(iter.dt$run)){
+      dt %>%
+        filter( run == r & exp == e) %>%
+        plot.single.run(lbl.exp.1l.short[e], r, ymax) -> p[[n]]
+      n = n + 1
+    }
+  }
+  p
+}
+
+iter.dt %>%
+  filter(batch.size == 1) %>%
+  ## filter(epoch == 1) %>%
+  ## filter(!(epoch == 1 & iter == 1)) %>%
+  mutate(epoch = factor(epoch)) %>%
+  ## plot.iter.times(scl = "fixed") +
+  plot.iter.times.v2() -> p
+yttl <- grid::textGrob('Step duration (s)', rot = 90)
+xttl <- grid::textGrob('Step number')
+pw <-
+  (wrap_elements(yttl) + 
+   (p[[ 1]] + p[[ 2]] + p[[ 3]] +
+    p[[ 4]] + p[[ 5]] + p[[ 6]] +
+    p[[ 7]] + p[[ 8]] + p[[ 9]] +
+    p[[10]] + p[[11]] + p[[12]] +
+    p[[13]] + p[[14]] + p[[15]] +
+    p[[16]] + p[[17]] + p[[18]] +
+    p[[19]] + p[[20]] + p[[21]] +
+    plot_layout(guides="collect", ncol = 3, nrow = 7) &
+    theme(legend.title = element_text(size = 12))) +
+  plot_layout(ncol = 2 , nrow = 1, widths = c(0.1, 4))) /
+  wrap_elements(xttl) +
+  plot_layout(nrow = 2, heights = c(7, 0.125)) 
+  
+  
+## wrap_elements(grid::textGrob('Step duration (s)', rot = 90)) | pw / grid::textGrob('Step number')
+
+pw
+#+end_src
+
+#+RESULTS: plot-iter-time-all-v2
+[[file:./img/iteration-times-all-instances-v2.png]]
+
+PDF version:
+#+name: plot-iter-time-all-v2-pdf
+#+begin_src R :results output graphics file :file iteration-times-all-instances-v2.pdf :exports both :width 9 :height 12 :noweb no-export
+<<plot-iter-time-all-v2>>
+#+end_src
+
+#+RESULTS: plot-iter-time-all-v2-pdf
+[[file:./img/iteration-times-all-instances-v2.pdf]]
+
+
 ** Epoch times
 
 *** Reading the data
@@ -1426,3 +1645,65 @@ lbl.exp
 :          "IAAS-p3.2xlarge" "SAGEMAKER-ml-g4dn-xlarge" 
 :    SageMaker ml.p3.2xlarge 
 :  "SAGEMAKER-ml-p3-2xlarge"
+
+
+#+begin_src R :results output :exports both :noweb no-export
+p = data.frame()
+n = 1
+for(i in unique(iter.dt$exp)){
+  for(r in unique(iter.dt$run)){
+    p[i,r] = n
+    n = n + 1
+    print(paste(i, r, p[i,r]))
+  }
+}
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "IAAS-g3s.xlarge 1 1"
+[1] "IAAS-g3s.xlarge 2 2"
+[1] "IAAS-g3s.xlarge 3 3"
+[1] "IAAS-g4dn.xlarge 1 4"
+[1] "IAAS-g4dn.xlarge 2 5"
+[1] "IAAS-g4dn.xlarge 3 6"
+[1] "IAAS-g5.xlarge 1 7"
+[1] "IAAS-g5.xlarge 2 8"
+[1] "IAAS-g5.xlarge 3 9"
+[1] "IAAS-p2.xlarge 1 10"
+[1] "IAAS-p2.xlarge 2 11"
+[1] "IAAS-p2.xlarge 3 12"
+[1] "IAAS-p3.2xlarge 1 13"
+[1] "IAAS-p3.2xlarge 2 14"
+[1] "IAAS-p3.2xlarge 3 15"
+[1] "SAGEMAKER-ml-g4dn-xlarge 1 16"
+[1] "SAGEMAKER-ml-g4dn-xlarge 2 17"
+[1] "SAGEMAKER-ml-g4dn-xlarge 3 18"
+[1] "SAGEMAKER-ml-p3-2xlarge 1 19"
+[1] "SAGEMAKER-ml-p3-2xlarge 2 20"
+[1] "SAGEMAKER-ml-p3-2xlarge 3 21"
+#+end_example
+
+#+begin_src R :results output :exports both :noweb no-export
+iter.dt %>%
+  filter(batch.size == 1) %>%
+  mutate(epoch = factor(epoch)) %>%
+  select(exp, run, epoch, iter, iter.dur) %>%
+  filter( run == 2 & exp == "SAGEMAKER-ml-g4dn-xlarge") %>%
+  filter(!(epoch == 1 & iter == 1)) %>%
+  data.frame() -> dt.tmp
+
+max(dt.tmp$iter.dur)
+#+end_src
+
+#+RESULTS:
+: [1] 2.473
+
+#+begin_src R :results output :exports both :noweb no-export
+lbl.exp["SAGEMAKER-ml-g4dn-xlarge"]
+#+end_src
+
+#+RESULTS:
+:    SAGEMAKER-ml-g4dn-xlarge 
+: "SageMaker\nml.g4dn.xlarge"
