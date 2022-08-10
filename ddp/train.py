@@ -26,11 +26,11 @@ def train(args, local_rank):
     # load hyper parameters
     task_id = args.task_id
     fold = args.fold
-    experiment_id = str(time.time())[:8]
+    experiment_id = args.exp_id or str(time.time())[:8]
     log_dir = Path(args.log_dir)
     checkpoint_dir = Path(args.checkpoint_dir)
     batch_size = args.batch_size
-    log_filename = log_dir / f"nnunet_task-{task_id}_fold-{fold}_{experiment_id}.log"
+    log_filename = log_dir / f"nnunet_task-{task_id}_fold-{fold}_{experiment_id}-rank_{local_rank}.log"
     interval = args.interval
     learning_rate = args.learning_rate
     max_epochs = args.max_epochs
@@ -73,9 +73,9 @@ def train(args, local_rank):
             device = torch.device(f"cuda:{local_rank}")
         else:
             device = torch.device("cuda:0")
+        print(f"Using device: {device}")
         if is_distributed:
-            dist.init_process_group(backend="nccl", init_method="env://")
-            torch.cuda.set_device(device)
+            dist.init_process_group(backend="gloo", init_method="env://")
 
     # create loaders
     properties, val_loader = get_data(args, mode="validation")
@@ -85,10 +85,12 @@ def train(args, local_rank):
     checkpoint = args.checkpoint
     net = get_network(properties, task_id, checkpoint_dir, checkpoint)
     net = net.to(device)
+    print(f"Moving to device: {device}")
 
     # is distributed
     if is_distributed:
         net = DistributedDataParallel(module=net, device_ids=[device])
+        print(f"Using DDP at: {device}")
 
     optimizer = torch.optim.SGD(
         net.parameters(),
@@ -161,9 +163,9 @@ def train(args, local_rank):
         amp=amp_flag,
     )
 
-    if local_rank > 0:
-        evaluator.logger.setLevel(logging.WARNING)
-        trainer.logger.setLevel(logging.WARNING)
+    # if local_rank > 0:
+    #     evaluator.logger.setLevel(logging.WARNING)
+    #     trainer.logger.setLevel(logging.WARNING)
 
     logger = logging.getLogger()
 
@@ -308,6 +310,13 @@ if __name__ == "__main__":
         help="The cache_rate parameter of CacheDataset."
     )
     parser.add_argument(
+        "-exp_id",
+        "--exp_id",
+        type=str,
+        default=None,
+        help="Experiment id"
+    )
+    parser.add_argument(
         "-learning_rate",
         "--learning_rate",
         type=float,
@@ -384,16 +393,23 @@ if __name__ == "__main__":
         help="Use multiple GPUs in the same machine"
     )
     parser.add_argument(
+        "--local_rank",
+        type=int,
+        required=False,
+        default=0
+    )
+    parser.add_argument(
         "-use_sagemaker",
         "--use_sagemaker",
         type=bool,
         help="Apply Sagemaker environment variables"
     )
 
-    local_rank = os.environ.get("LOCAL_RANK", -1)
-    local_rank = int(local_rank)
-
     args = parser.parse_args()
+    local_rank = args.local_rank
+    # print(args)
+    # print(f"LOCAL_RANK: {local_rank}")
+
     if args.use_cpu and args.multi_gpu:
         raise ValueError("use_cpu and multi_gpu flags are mutually exclusive")
 
@@ -415,3 +431,4 @@ if __name__ == "__main__":
     #     ret_val = validation(args, local_rank)
 
     sys.exit(ret_val)
+
